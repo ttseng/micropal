@@ -1,18 +1,112 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Hello!</title>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/styles.css">
-    <script src="/script.js" defer></script>
-  </head>
-  <body>
-    <h1>Hi there!</h1>
-    <p>
-      I'm your cool new webpage. Made with 
-      <a href="https://www.glitch.com">Glitch</a>
-    </p>
-  </body>
+<html lang="ja">
+
+<head>
+  <!-- Required meta tags -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+
+  <title>microbit-led</title>
+  <meta name="description" content="Control a LED matrix on BBC micro:bit boards with Web Bluetooth API.">
+  <meta name="keywords" content="microbit,web bluetooth api">
+  <meta name="theme-color" content="#007bff">
+  <meta property="og:title" content="microbit-led">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="Control a LED matrix on BBC micro:bit boards with Web Bluetooth API.">
+  <meta property="og:site_name" content="microbit-led">
+  <script type="text/javascript" src="microbit.js"></script>
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary justify-content-between">
+    <a class="navbar-brand" href="https://pokiiio.github.io/">Control micro:bit LED</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+      aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+      <ul class="navbar-nav">
+        <li class="nav-item active" onClick="onClickStartButton()">
+          <a class="nav-link" href="#">Start</a>
+        </li>
+        <li class="nav-item active" onClick="onClickStopButton()">
+          <a class="nav-link" href="#">Stop</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="container">
+      <div class="row justify-content-center">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check00">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check01">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check02">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check03">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check04">
+      </div>
+      <div class="row justify-content-center">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check10">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check11">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check12">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check13">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check14">
+      </div>
+      <div class="row justify-content-center">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check20">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check21">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check22">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check23">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check24">
+      </div>
+      <div class="row justify-content-center">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check30">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check31">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check32">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check33">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check34">
+      </div>
+      <div class="row justify-content-center">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check40">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check41">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check42">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check43">
+        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check44">
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="myModalLabel">Error</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" name="modal-message"></div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+</body>
+
 </html>
