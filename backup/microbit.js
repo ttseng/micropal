@@ -1,6 +1,7 @@
 
 let targetDevice = null;
 
+
 let ledMatrixStateCharacteristic = null;
 
 const LED_SERVICE = "e95dd91d-251d-470a-a062-fa1922dfa9a8";
@@ -14,9 +15,8 @@ LED_SCROLL = 'E95D0D2D-251D-470A-A062-FA1922DFA9A8'
 ACCEL_SRV = 'E95D0753-251D-470A-A062-FA1922DFA9A8'
 ACCEL_DATA = 'E95DCA4B-251D-470A-A062-FA1922DFA9A8'
 ACCEL_PERIOD = 'E95DFB24-251D-470A-A062-FA1922DFA9A8'
-
-BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
 */
+
 const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
 function onClickStartButton() {
@@ -37,15 +37,14 @@ function onClickStopButton() {
   disconnect();
 }
 
-//step 5
 function onChangeCheckBox() {
   if (ledMatrixStateCharacteristic == null) {
     return;
   }
-  
+
   ledMatrixStateCharacteristic.writeValue(generateUint8Array())
     .catch(error => {
-    showModal(error);
+      showModal(error);
     });
 }
 
@@ -69,24 +68,22 @@ function generateUint8Array() {
   return array;
 }
 
-//step1
 function requestDevice() {
   navigator.bluetooth.requestDevice({
     filters: [
-    { services: [LED_SERVICE] },
-    { namePrefix: "BBC micro:bit" }
+      { services: [LED_SERVICE] },
+      { namePrefix: "BBC micro:bit" }
     ]
   })
     .then(device => {
-    targetDevice = device;
-    connect(targetDevice);
+      targetDevice = device;
+      connect(targetDevice);
     })
     .catch(error => {
-    showModal(error);
-    targetDevice = null;
+      showModal(error);
+      targetDevice = null;
     });
 }
-
 
 function disconnect() {
   if (targetDevice == null) {
@@ -99,19 +96,16 @@ function disconnect() {
   ledMatrixStateCharacteristic = null;
 }
 
-//step2
 function connect(device) {
   device.gatt.connect()
     .then(server => {
-    findLedService(server);
+      findLedService(server);
     })
     .catch(error => {
-    showModal(error);
+      showModal(error);
     });
-  }
+}
 
-
-//step3
 function findLedService(server) {
   server.getPrimaryService(LED_SERVICE)
     .then(service => {
@@ -122,21 +116,19 @@ function findLedService(server) {
     });
 }
 
-//step4
 function findLedMatrixStateCharacteristic(service) {
   service.getCharacteristic(LED_MATRIX_STATE)
-  .then(characteristic => {
-  ledMatrixStateCharacteristic = characteristic;
-  ledMatrixStateCharacteristic.writeValue(new Uint8Array(5))
+    .then(characteristic => {
+      ledMatrixStateCharacteristic = characteristic;
+      ledMatrixStateCharacteristic.writeValue(new Uint8Array(5))
+        .catch(error => {
+          showModal(error);
+        });
+    })
     .catch(error => {
-    showModal(error);
+      showModal('LED Matrix State characteristic not found.');
     });
-  })
-  .catch(error => {
-  showModal('LED Matrix State characteristic not found.');
-  });
 }
-
 
 function showModal(message) {
   document.getElementsByName("modal-message")[0].innerHTML = message;
