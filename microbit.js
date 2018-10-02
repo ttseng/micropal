@@ -3,12 +3,16 @@ let targetDevice = null;
 
 let ledMatrixStateCharacteristic = null;
 
+
+
 const LED_SERVICE = "e95dd91d-251d-470a-a062-fa1922dfa9a8";
+const LED_BITMAP = 'e95d7b77-251d-470a-a062-fa1922dfa9a8';
+const LED_TEXT = 'e95d93ee-251d-470a-a062-fa1922dfa9a8';
+const BTN_A_STATE = 'E95DDA90-251D-470A-A062-FA1922DFA9A8';
+
+const services = [LED_SERVICE, LED_BITMAP, LED_TEXT, BTN_A_STATE];
 
 /*
-LED_SERVICE = 'e95dd91d-251d-470a-a062-fa1922dfa9a8';
-LED_BITMAP = 'e95d7b77-251d-470a-a062-fa1922dfa9a8';
-LED_TEXT = 'e95d93ee-251d-470a-a062-fa1922dfa9a8';
 LED_TEXT_SPEED = 'e95d0d2d-251d-470a-a062-fa1922dfa9a8';
 LED_SCROLL = 'E95D0D2D-251D-470A-A062-FA1922DFA9A8'
 ACCEL_SRV = 'E95D0753-251D-470A-A062-FA1922DFA9A8'
@@ -17,6 +21,7 @@ ACCEL_PERIOD = 'E95DFB24-251D-470A-A062-FA1922DFA9A8'
 
 BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
 */
+
 const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
 function onClickStartButton() {
@@ -76,7 +81,7 @@ function requestDevice() {
   console.log('request device');
   navigator.bluetooth.requestDevice({
     filters: [
-    { services: [LED_SERVICE] },
+    { services: services },
     { namePrefix: "BBC micro:bit" }
     ]
   })
@@ -108,48 +113,33 @@ function connect(device) {
   console.log('connect');
   device.gatt.connect()
   .then(server => {
-    console.log('Getting Services...');
-    return server.getPrimaryServices();
-    // findLedService(server);
+    console.log('Getting LED service...');
+    findLedService(server);
     })
-  .then(services => {
-    console.log('Getting characteristics...');
-    let queue = Promise.resolve();
-    services.forEach(service =>{
-      queue = queue.then(_ => service.getCharacteristics().then(characteristics => {
-        console.log('> Service: ' + service.uuid);
-        characteristics.forEach(characteristic => {
-          console.log('>> Characteristic: ' + characteristic.uuid + ' ' +
-              getSupportedProperties(characteristic));
-        });
-    }));
-   })
-  })
   .catch(error => {
     showModal(error);
     });
   }
-        
-function getSupportedProperties(characteristic) {
-  let supportedProperties = [];
-  for (const p in characteristic.properties) {
-    if (characteristic.properties[p] === true) {
-      supportedProperties.push(p.toUpperCase());
-    }
-  }
-  return '[' + supportedProperties.join(', ') + ']';
-}
-
+      
 //step3
 function findLedService(server) {
   console.log('find LED service');
-  server.getPrimaryService(LED_SERVICE)
-    .then(service => {
-      findLedMatrixStateCharacteristic(service);
-    })
-    .catch(error => {
-      showModal(error);
-    });
+  server.getPrimaryService('battery_service')
+  .then(service => {
+    return service.getCharacteristic('battery_level');
+  })
+  .then(characteristic => {
+    return characteristic.readValue();
+  })
+  .t;
+  
+  // server.getPrimaryService(LED_SERVICE)
+  //   .then(service => {
+  //     findLedMatrixStateCharacteristic(service);
+  //   })
+  //   .catch(error => {
+  //     showModal(error);
+  //   });
 }
 
 //step4
