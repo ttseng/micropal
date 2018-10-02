@@ -107,14 +107,38 @@ function disconnect() {
 function connect(device) {
   console.log('connect');
   device.gatt.connect()
-    .then(server => {
-    findLedService(server);
+  .then(server => {
+    console.log('Getting Services...');
+    return server.getPrimaryServices();
+    // findLedService(server);
     })
-    .catch(error => {
+  .then(services => {
+    console.log('Getting characteristics...');
+    let queue = Promise.resolve();
+    services.forEach(service =>{
+      queue = queue.then(_ => service.getCharacteristics().then(characteristics => {
+        console.log('> Service: ' + service.uuid);
+        characteristics.forEach(characteristic => {
+          console.log('>> Characteristic: ' + characteristic.uuid + ' ' +
+              getSupportedProperties(characteristic));
+        });
+    }));
+   })
+  })
+  .catch(error => {
     showModal(error);
     });
   }
-
+        
+function getSupportedProperties(characteristic) {
+  let supportedProperties = [];
+  for (const p in characteristic.properties) {
+    if (characteristic.properties[p] === true) {
+      supportedProperties.push(p.toUpperCase());
+    }
+  }
+  return '[' + supportedProperties.join(', ') + ']';
+}
 
 //step3
 function findLedService(server) {
