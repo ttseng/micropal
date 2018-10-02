@@ -8,9 +8,9 @@ let ledMatrixStateCharacteristic = null;
 const LED_SERVICE = "e95dd91d-251d-470a-a062-fa1922dfa9a8";
 const LED_BITMAP = 'e95d7b77-251d-470a-a062-fa1922dfa9a8';
 const LED_TEXT = 'e95d93ee-251d-470a-a062-fa1922dfa9a8';
-const BTN_A_STATE = 'E95DDA90-251D-470A-A062-FA1922DFA9A8';
+// const BTN_A_STATE = 'E95DDA90-251D-470A-A062-FA1922DFA9A8';
 
-const services = [LED_SERVICE, LED_BITMAP, LED_TEXT, BTN_A_STATE];
+const services = [LED_SERVICE, LED_BITMAP, LED_TEXT];
 
 /*
 LED_TEXT_SPEED = 'e95d0d2d-251d-470a-a062-fa1922dfa9a8';
@@ -81,9 +81,10 @@ function requestDevice() {
   console.log('request device');
   navigator.bluetooth.requestDevice({
     filters: [
-    { services: services },
+    { services: [LED_SERVICE] },
     { namePrefix: "BBC micro:bit" }
-    ]
+    ],
+    optionalServices: [LED_SERVICE]
   })
     .then(device => {
     targetDevice = device;
@@ -124,22 +125,26 @@ function connect(device) {
 //step3
 function findLedService(server) {
   console.log('find LED service');
-  server.getPrimaryService('battery_service')
-  .then(service => {
-    return service.getCharacteristic('battery_level');
-  })
-  .then(characteristic => {
-    return characteristic.readValue();
-  })
-  .t;
+  // server.getPrimaryService('battery_service')
+  // .then(service => {
+  //   console.log('get battery level');
+  //   return service.getCharacteristic('battery_level');
+  // })
+  // .then(characteristic => {
+  //   console.log('get value');
+  //   return characteristic.readValue();
+  // })
+  // .then(value => {
+  //   console.log('battery percentage is ' + value.getUint8(0));
+  // });
   
-  // server.getPrimaryService(LED_SERVICE)
-  //   .then(service => {
-  //     findLedMatrixStateCharacteristic(service);
-  //   })
-  //   .catch(error => {
-  //     showModal(error);
-  //   });
+  server.getPrimaryService(LED_SERVICE)
+    .then(service => {
+      findLedMatrixStateCharacteristic(service);
+    })
+    .catch(error => {
+      showModal(error);
+    });
 }
 
 //step4
