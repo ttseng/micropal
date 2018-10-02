@@ -1,24 +1,45 @@
-
 let targetDevice = null;
 
 let ledMatrixStateCharacteristic = null;
 
+// ACCELEROMETER
+const ACCEL_SRV = 'E95D0753-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const ACCEL_DATA = 'E95DCA4B-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const ACCEL_PERIOD = 'E95DFB24-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+
+// MAGNETIC SENSOR
+const MAGNETO_SRV = 'E95DF2D8-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const MAGNETO_DATA = 'E95DFB11-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const MAGNETO_PERIOD = 'E95D386C-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const MAGNETO_BEARING = 'E95D9715-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+
+// BUTTONS
+const BTN_SRV = 'E95D9882-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const BTN_A_STATE = 'E95DDA90-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const BTN_B_STATE = 'E95DDA91-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+
+// IO PINS
+const IO_PIN_SRV = 'E95D127B-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const IO_PIN_DATA = 'E95D8D00-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const IO_AD_CONFIG = 'E95D5899-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const IO_PIN_CONFIG = 'E95DB9FE-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const IO_PIN_PWM = 'E95DD822-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+
+// LEDS
+const LED_SRV = 'E95DD91D-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const LED_STATE = 'E95D7B77-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const LED_TEXT = 'E95D93EE-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const LED_SCROLL = 'E95D0D2D-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+
+// TEMPERATURE SENSOR
+const TEMP_SRV = 'E95D6100-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const TEMP_DATA = 'E95D9250-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
+const TEMP_PERIOD = 'E95D1B25-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 
 
-const LED_SERVICE = "e95dd91d-251d-470a-a062-fa1922dfa9a8";
-const LED_BITMAP = 'e95d7b77-251d-470a-a062-fa1922dfa9a8';
-const LED_TEXT = 'e95d93ee-251d-470a-a062-fa1922dfa9a8';
-// const BTN_A_STATE = 'E95DDA90-251D-470A-A062-FA1922DFA9A8';
-
-const services = [LED_SERVICE, LED_BITMAP, LED_TEXT];
+const services = [ACCEL_SRV, BTN_SRV, LED_SRV, TEMP_SRV];
 
 /*
-LED_TEXT_SPEED = 'e95d0d2d-251d-470a-a062-fa1922dfa9a8';
-LED_SCROLL = 'E95D0D2D-251D-470A-A062-FA1922DFA9A8'
-ACCEL_SRV = 'E95D0753-251D-470A-A062-FA1922DFA9A8'
-ACCEL_DATA = 'E95DCA4B-251D-470A-A062-FA1922DFA9A8'
-ACCEL_PERIOD = 'E95DFB24-251D-470A-A062-FA1922DFA9A8'
-
 BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
 */
 
@@ -81,10 +102,10 @@ function requestDevice() {
   console.log('request device');
   navigator.bluetooth.requestDevice({
     filters: [
-    { services: [LED_SERVICE] },
+    { services: services },
     { namePrefix: "BBC micro:bit" }
     ],
-    optionalServices: [LED_SERVICE]
+    optionalServices: services
   })
     .then(device => {
     targetDevice = device;
@@ -124,20 +145,7 @@ function connect(device) {
       
 //step3
 function findLedService(server) {
-  console.log('find LED service');
-  // server.getPrimaryService('battery_service')
-  // .then(service => {
-  //   console.log('get battery level');
-  //   return service.getCharacteristic('battery_level');
-  // })
-  // .then(characteristic => {
-  //   console.log('get value');
-  //   return characteristic.readValue();
-  // })
-  // .then(value => {
-  //   console.log('battery percentage is ' + value.getUint8(0));
-  // });
-  
+  console.log('find LED service');  
   server.getPrimaryService(LED_SERVICE)
     .then(service => {
       findLedMatrixStateCharacteristic(service);
@@ -152,14 +160,14 @@ function findLedMatrixStateCharacteristic(service) {
   console.log('find LED Matrix State Characteristic');
   service.getCharacteristic(LED_MATRIX_STATE)
   .then(characteristic => {
-  ledMatrixStateCharacteristic = characteristic;
-  ledMatrixStateCharacteristic.writeValue(new Uint8Array(5))
-    .catch(error => {
+    ledMatrixStateCharacteristic = characteristic;
+    ledMatrixStateCharacteristic.writeValue(new Uint8Array(5))
+  .catch(error => {
     showModal(error);
     });
   })
   .catch(error => {
-  showModal('LED Matrix State characteristic not found.');
+    showModal('LED Matrix State characteristic not found.');
   });
 }
 
