@@ -20,6 +20,8 @@ BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
 const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
 function onClickStartButton() {
+  console.log('onClickStartButton');
+  
   if (!navigator.bluetooth) {
     showModal("Web Bluetooth is not supported.")
     return;
@@ -71,6 +73,7 @@ function generateUint8Array() {
 
 //step1
 function requestDevice() {
+  console.log('request device');
   navigator.bluetooth.requestDevice({
     filters: [
     { services: [LED_SERVICE] },
@@ -82,6 +85,7 @@ function requestDevice() {
     connect(targetDevice);
     })
     .catch(error => {
+    console.log('error in request device');
     showModal(error);
     targetDevice = null;
     });
@@ -101,6 +105,7 @@ function disconnect() {
 
 //step2
 function connect(device) {
+  console.log('connect');
   device.gatt.connect()
     .then(server => {
     findLedService(server);
@@ -113,6 +118,7 @@ function connect(device) {
 
 //step3
 function findLedService(server) {
+  console.log('find LED service');
   server.getPrimaryService(LED_SERVICE)
     .then(service => {
       findLedMatrixStateCharacteristic(service);
@@ -124,6 +130,7 @@ function findLedService(server) {
 
 //step4
 function findLedMatrixStateCharacteristic(service) {
+  console.log('find LED Matrix State Characteristic');
   service.getCharacteristic(LED_MATRIX_STATE)
   .then(characteristic => {
   ledMatrixStateCharacteristic = characteristic;
