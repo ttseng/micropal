@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   
- <link rel="stylesheet" href="/style.css">
+ <link rel="stylesheet" href="styles.css">
 
   <title>microbit-led</title>
   <meta name="description" content="Control a LED matrix on BBC micro:bit boards with Web Bluetooth API.">
@@ -33,18 +33,18 @@
 
     <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
       <ul class="navbar-nav">
-        <li class="nav-item active" onClick="onClickStartButton()">
+<!--         <li class="nav-item active" onClick="onClickStartButton()">
           <a class="nav-link" href="#">Start</a>
         </li>
         <li class="nav-item active" onClick="onClickStopButton()">
           <a class="nav-link" href="#">Stop</a>
-        </li>
+        </li> -->
       </ul>
     </div>
   </nav>
 
   <div class="container-fluid">
-    <div class="container">
+    <div class="container" id="checkboxes">
       <div class="row justify-content-center">
         <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check00">
         <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check01">
@@ -83,7 +83,7 @@
     </div>
   </div>
   
-  <button onclick="pair()">Pair</button>
+  <button onclick="pair()" id="pair-btn">Pair</button>
   <div id="actions">
     <button onclick="setLED()">Set LED</button>
     <button onclick="checkBtns()">Check btns</button>

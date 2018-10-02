@@ -137,7 +137,8 @@ function connect(device) {
   device.gatt.connect()
   .then(server => {
     microbitServer = server;
-    document.findElementById('actions').css('visibility', 'visible');
+    document.getElementById('actions').style.visibility = 'visible';
+    document.getElementById('pair-btn').style.visibility = 'hidden';
   })
   .catch(error => {
     showModal(error);

@@ -3,12 +3,23 @@ h1 {
 }
 #actions{
   visibility: hidden;
+  margin: 0 auto;
 }
-button {
+button{
+  display: block;
+  margin: 15px auto;
   font-size: 16px;
   border-radius: 3px;
   background-color: lightgrey;
   border: 1px solid grey;
   box-shadow: 2px 2px teal;
   cursor: pointer;
+}
+#checkboxes{
+  display: none;
+}
+#pair-btn{
+  background: #73f592;
+  font-size: 20px;
+  margin-top: 50px;
 }
