@@ -9,6 +9,8 @@
   <!-- Bootstrap CSS -->
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
+  
+ <link rel="stylesheet" href="/style.css">
 
   <title>microbit-led</title>
   <meta name="description" content="Control a LED matrix on BBC micro:bit boards with Web Bluetooth API.">
@@ -81,9 +83,12 @@
     </div>
   </div>
   
-  <button onClick="onClickButton()">
-    
-  </button>
+  <button onclick="pair()">Pair</button>
+  <div id="actions">
+    <button onclick="setLED()">Set LED</button>
+    <button onclick="checkBtns()">Check btns</button>
+    <button onclick="checkTmp()">Check tmp</button>
+  </div>
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

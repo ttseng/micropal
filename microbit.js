@@ -2,6 +2,8 @@ let targetDevice = null;
 
 let ledMatrixStateCharacteristic = null;
 
+let microbitServer = null;
+
 // ACCELEROMETER
 const ACCEL_SERVICE = 'E95D0753-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 const ACCEL_DATA = 'E95DCA4B-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
@@ -45,14 +47,13 @@ BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
 
 const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
-function onClickStartButton() {
-  console.log('onClickStartButton');
+function pair() {
+  console.log('pairing');
   
   if (!navigator.bluetooth) {
     showModal("Web Bluetooth is not supported.")
     return;
   }
-
   requestDevice();
 }
 
@@ -135,19 +136,28 @@ function connect(device) {
   console.log('connect');
   device.gatt.connect()
   .then(server => {
-    // console.log('Getting LED service...');
-    // findLedService(server);
-    
-    // console.log('Getting temp service...');
-    // findTempService(server);
-
-    console.log('Getting btn service...');
-    findBtnService(server);
+    microbitServer = server;
+    document.findElementById('actions').css('visibility', 'visible');
   })
   .catch(error => {
     showModal(error);
     });
   }
+
+function setLED(){
+  console.log('Getting LED service...');
+  findLedService(microbitServer);
+}
+
+function checkBtns(){
+  console.log('Getting btn service...');
+  findBtnService(microbitServer);
+}
+
+function checkTmp(){
+  console.log('Getting temp service...');
+  findTempService(microbitServer);
+}
       
 //step3
 function findLedService(server) {
