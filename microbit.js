@@ -47,14 +47,41 @@ BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
 
 const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
-function pair() {
-  console.log('pairing');
-  
+async function pair() {  
   if (!navigator.bluetooth) {
     showModal("Web Bluetooth is not supported.")
     return;
   }
-  requestDevice();
+  // requestDevice();
+  try{
+    console.log('requesting bluetooth device...');
+    document.getElementById('status').innerHTML = "requesting bluetooth device...";
+    const uBitDevice = await navigator.bluetooth.requestDevice({
+      filters: [{ namePrefix: "BBC micro:bit" }],
+      optionalServices: services
+    });
+    
+    console.log('connecting to GATT server...');
+    document.getElementById('status').innerHTML = "requesting bluetooth device...";
+    const server = await uBitDevice.gatt.connect();
+    
+    console.log('getting service...');
+    const service = await server.getPrimaryService(LED_SERVICE);
+    
+    console.log('getting characteristics...');
+    const characteristic = await service.getCharacteristic(LED_MATRIX_STATE);
+    
+    // show UI
+    document.getElementById('actions').style.visibility = 'visible';
+    document.getElementById('pair-btn').style.display = 'none';
+    document.getElementById('checkboxes').style.display = 'inline-block';
+    
+    const ledValue = characteristic.writeValue(new Uint8Array(5));
+    
+  }catch(error){
+    showModal(error);
+  }
+  
 }
 
 function onClickStopButton() {
