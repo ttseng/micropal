@@ -71,7 +71,7 @@ function onChangeCheckBox() {
     });
 }
 
-function clear(){
+function clearMatrix(){
   console.log('clear');
   if (ledMatrixStateCharacteristic == null) {
     return;
