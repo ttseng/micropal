@@ -1,6 +1,7 @@
 // Microbit Bluetooth documentation: https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
 let targetDevice = null;
 let ledMatrixStateCharacteristic = null;
+let ledService = null;
 
 // LEDS UUIDs
 const LED_SERVICE = 'E95DD91D-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
@@ -38,11 +39,11 @@ async function pair() {
     
     console.log('getting service...');
     document.getElementById('status').innerHTML = 'getting service...';
-    const service = await server.getPrimaryService(LED_SERVICE);
+    ledService = await server.getPrimaryService(LED_SERVICE);
     
     console.log('getting characteristics...');
     document.getElementById('status').innerHTML = 'getting characteristics...';
-    ledMatrixStateCharacteristic = await service.getCharacteristic(LED_MATRIX_STATE);
+    ledMatrixStateCharacteristic = await ledService.getCharacteristic(LED_MATRIX_STATE);
     
     // show UI
     document.getElementById('actions').style.visibility = 'visible';
@@ -111,6 +112,12 @@ function disconnect() {
   targetDevice.gatt.disconnect();
   targetDevice = null;
   ledMatrixStateCharacteristic = null;
+}
+
+async function sendText(){
+  ledTextCharacteristic = await ledService.getCharacteristic(LED_TEXT);
+  let text = document.getElementById('text').value;
+  ledTextCharacteristic.writeValue(text);
 }
 
 function showModal(message) {
