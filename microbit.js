@@ -60,23 +60,28 @@ async function pair() {
       filters: [{ namePrefix: "BBC micro:bit" }],
       optionalServices: services
     });
+    document.getElementById('status-container').style.display = 'inline';
+    document.getElementById('pair-btn').style.display = 'none';
     
     console.log('connecting to GATT server...');
-    document.getElementById('status').innerHTML = "requesting bluetooth device...";
+    document.getElementById('status').innerHTML = 'connecting to GATT server...';
     const server = await uBitDevice.gatt.connect();
     
     console.log('getting service...');
+    document.getElementById('status').innerHTML = 'getting service...';
     const service = await server.getPrimaryService(LED_SERVICE);
     
     console.log('getting characteristics...');
-    const characteristic = await service.getCharacteristic(LED_MATRIX_STATE);
+    document.getElementById('status').innerHTML = 'getting characteristics...';
+    ledMatrixStateCharacteristic = await service.getCharacteristic(LED_MATRIX_STATE);
     
     // show UI
     document.getElementById('actions').style.visibility = 'visible';
-    document.getElementById('pair-btn').style.display = 'none';
     document.getElementById('checkboxes').style.display = 'inline-block';
     
-    const ledValue = characteristic.writeValue(new Uint8Array(5));
+    document.getElementById('status-container').style.display = 'none';
+    ledMatrixStateCharacteristic.writeValue(new Uint8Array(5));
+     
     
   }catch(error){
     showModal(error);
@@ -95,6 +100,7 @@ function onClickStopButton() {
 
 //step 5
 function onChangeCheckBox() {
+  console.log('on change check box');
   if (ledMatrixStateCharacteristic == null) {
     return;
   }

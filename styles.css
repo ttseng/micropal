@@ -3,6 +3,13 @@ body{
   background: #e8e8e8;
   padding: 50px;
 }
+#status-container{
+  display: none;
+  background: darkgrey;
+  border-radius: 5px;
+  padding: 5px;
+  color: white;
+}
 #actions{
   visibility: hidden;
   margin: 10px auto;
