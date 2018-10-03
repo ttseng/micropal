@@ -49,6 +49,7 @@ async function pair() {
     
     document.getElementById('status-container').style.display = 'none';
     ledMatrixStateCharacteristic.writeValue(new Uint8Array(5));
+    console.log('ready');
      
     
   }catch(error){
