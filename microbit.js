@@ -1,7 +1,5 @@
 let targetDevice = null;
-
 let ledMatrixStateCharacteristic = null;
-
 let microbitServer = null;
 
 // ACCELEROMETER
@@ -100,14 +98,13 @@ function onClickStopButton() {
 
 //step 5
 function onChangeCheckBox() {
-  console.log('on change check box');
   if (ledMatrixStateCharacteristic == null) {
     return;
   }
   
   ledMatrixStateCharacteristic.writeValue(generateUint8Array())
     .then(test => {
-      console.log('writing new LED matrix value');
+      // console.log('writing new LED matrix value');
     })
     .catch(error => {
     showModal(error);
@@ -134,28 +131,6 @@ function generateUint8Array() {
   return array;
 }
 
-//step1
-function requestDevice() {
-  console.log('request device');
-  navigator.bluetooth.requestDevice({
-    filters: [
-    { services: services },
-    { namePrefix: "BBC micro:bit" }
-    ],
-    optionalServices: services
-  })
-    .then(device => {
-    targetDevice = device;
-    connect(targetDevice);
-    })
-    .catch(error => {
-    console.log('error in request device');
-    showModal(error);
-    targetDevice = null;
-    });
-}
-
-
 function disconnect() {
   if (targetDevice == null) {
     showModal('target device is null.');
@@ -167,22 +142,7 @@ function disconnect() {
   ledMatrixStateCharacteristic = null;
 }
 
-//step2
-function connect(device) {
-  console.log('connect');
-  device.gatt.connect()
-  .then(server => {
-    microbitServer = server;
-    document.getElementById('actions').style.visibility = 'visible';
-    document.getElementById('pair-btn').style.display = 'none';
-    document.getElementById('checkboxes').style.display = 'inline-block';
-    
-    findLedService(microbitServer);
-  })
-  .catch(error => {
-    showModal(error);
-    });
-  }
+
 
 function checkBtns(){
   console.log('Getting btn service...');
@@ -194,33 +154,7 @@ function checkTmp(){
   findTempService(microbitServer);
 }
       
-//step3
-function findLedService(server) {
-  console.log('find LED service');  
-  server.getPrimaryService(LED_SERVICE)
-    .then(service => {
-      findLedMatrixStateCharacteristic(service);
-    })
-    .catch(error => {
-      showModal(error);
-    });
-}
 
-//step4
-function findLedMatrixStateCharacteristic(service) {
-  console.log('find LED Matrix State Characteristic');
-  service.getCharacteristic(LED_MATRIX_STATE)
-  .then(characteristic => {
-    ledMatrixStateCharacteristic = characteristic;
-    ledMatrixStateCharacteristic.writeValue(new Uint8Array(5))
-  .catch(error => {
-    showModal(error);
-    });
-  })
-  .catch(error => {
-    showModal('LED Matrix State characteristic not found.');
-  });
-}
 
 function findTempService(server){
   console.log('find temp service');
