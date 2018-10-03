@@ -17,7 +17,7 @@ const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
 async function pair() {  
   if (!navigator.bluetooth) {
-    showModal("Web Bluetooth is not supported in this browser. Please try Chrome or Opera.")
+    showModal("Web Bluetooth is not supported in this browser.")
     return;
   }
   // requestDevice();
@@ -57,16 +57,6 @@ async function pair() {
   
 }
 
-function onClickStopButton() {
-  if (!navigator.bluetooth) {
-    showModal("Web Bluetooth is not supported.")
-    return;
-  }
-
-  disconnect();
-}
-
-//step 5
 function onChangeCheckBox() {
   if (ledMatrixStateCharacteristic == null) {
     return;
@@ -79,6 +69,19 @@ function onChangeCheckBox() {
     .catch(error => {
     showModal(error);
     });
+}
+
+function clear(){
+  console.log('clear');
+  if (ledMatrixStateCharacteristic == null) {
+    return;
+  }
+  var checkboxes = document.querySelectorAll('input[type=checkbox]'), i;
+  for(i=0; i<checkboxes.length; i++){
+    checkboxes[i].checked = false;
+  }
+  
+  ledMatrixStateCharacteristic.writeValue(new Uint8Array(5));
 }
 
 function generateUint8Array() {
@@ -99,17 +102,6 @@ function generateUint8Array() {
 
 
   return array;
-}
-
-function disconnect() {
-  if (targetDevice == null) {
-    showModal('target device is null.');
-    return;
-  }
-
-  targetDevice.gatt.disconnect();
-  targetDevice = null;
-  ledMatrixStateCharacteristic = null;
 }
 
 async function sendText(){
