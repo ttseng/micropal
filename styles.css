@@ -1,5 +1,7 @@
-h1 {
-  color: fuchsia;
+body{
+  text-align: center;
+  background: #e8e8e8;
+  padding: 50px;
 }
 #actions{
   visibility: hidden;
@@ -17,6 +19,9 @@ button{
 }
 #checkboxes{
   display: none;
+  background: rgba(255,255,255,0.8);
+  width: 250px;
+  border-radius: 5px;
 }
 #pair-btn{
   background: #73f592;

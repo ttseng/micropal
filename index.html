@@ -10,19 +10,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <script type="text/javascript" src="microbit.js"></script>
   
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+    crossorigin="anonymous">
+  
  <link rel="stylesheet" href="styles.css">
 
 </head>
 
 <body>
   <div id="info">
-    <h1>
+    <h3>
       Control your Microbit's LED Matrix using Bluetooth on the Web!
-    </h1>
+    </h3>
     <p>
-      Note: Web Bluetooth is supported in Chrome
+      Note: Works best in Chrome.
     </p>
-    
   </div>
 
   <div class="container-fluid">
@@ -63,14 +65,18 @@
         <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check44">
       </div>
     </div>
+    
+    <button onclick="pair()" id="pair-btn">Pair</button>
+    <div id="actions">
+      <button onclick="setLED()">Set LED</button>
+      
+<!--       <button onclick="checkBtns()">Check btns</button>
+      <button onclick="checkTmp()">Check tmp</button> -->
+    </div>
+    
   </div>
   
-  <button onclick="pair()" id="pair-btn">Pair</button>
-  <div id="actions">
-    <button onclick="setLED()">Set LED</button>
-    <button onclick="checkBtns()">Check btns</button>
-    <button onclick="checkTmp()">Check tmp</button>
-  </div>
+  
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">

@@ -137,18 +137,15 @@ function connect(device) {
   device.gatt.connect()
   .then(server => {
     microbitServer = server;
-    document.getElementById('actions').style.visibility = 'visible';
-    document.getElementById('pair-btn').style.visibility = 'hidden';
+    document.getElementById('pair-btn').style.display = 'none';
+    document.getElementById('checkboxes').style.display = 'inline-block';
+    
+    findLedService(microbitServer);
   })
   .catch(error => {
     showModal(error);
     });
   }
-
-function setLED(){
-  console.log('Getting LED service...');
-  findLedService(microbitServer);
-}
 
 function checkBtns(){
   console.log('Getting btn service...');
