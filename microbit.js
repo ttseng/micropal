@@ -1,43 +1,14 @@
+// Microbit Bluetooth documentation: https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
 let targetDevice = null;
 let ledMatrixStateCharacteristic = null;
-let microbitServer = null;
 
-// ACCELEROMETER
-const ACCEL_SERVICE = 'E95D0753-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const ACCEL_DATA = 'E95DCA4B-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const ACCEL_PERIOD = 'E95DFB24-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-
-// MAGNETIC SENSOR
-const MAGNETO_SERVICE = 'E95DF2D8-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const MAGNETO_DATA = 'E95DFB11-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const MAGNETO_PERIOD = 'E95D386C-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const MAGNETO_BEARING = 'E95D9715-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-
-// BUTTONS
-const BTN_SERVICE = 'E95D9882-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const BTN_A_STATE = 'E95DDA90-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const BTN_B_STATE = 'E95DDA91-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-
-// IO PINS
-const IO_PIN_SERVICE = 'E95D127B-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const IO_PIN_DATA = 'E95D8D00-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const IO_AD_CONFIG = 'E95D5899-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const IO_PIN_CONFIG = 'E95DB9FE-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const IO_PIN_PWM = 'E95DD822-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-
-// LEDS
+// LEDS UUIDs
 const LED_SERVICE = 'E95DD91D-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 const LED_STATE = 'E95D7B77-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 const LED_TEXT = 'E95D93EE-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 const LED_SCROLL = 'E95D0D2D-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 
-// TEMPERATURE SENSOR
-const TEMP_SERVICE = 'E95D6100-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const TEMP_DATA = 'E95D9250-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-const TEMP_PERIOD = 'E95D1B25-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
-
-
-const services = [ACCEL_SERVICE, BTN_SERVICE, LED_SERVICE, TEMP_SERVICE];
+const services = [LED_SERVICE];
 
 /*
 BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
@@ -142,60 +113,8 @@ function disconnect() {
   ledMatrixStateCharacteristic = null;
 }
 
-
-
-function checkBtns(){
-  console.log('Getting btn service...');
-  findBtnService(microbitServer);
-}
-
-function checkTmp(){
-  console.log('Getting temp service...');
-  findTempService(microbitServer);
-}
-      
-
-
-function findTempService(server){
-  console.log('find temp service');
-  server.getPrimaryService(TEMP_SERVICE)
-    .then(service => {
-      service.getCharacteristic(TEMP_DATA)
-        .then(characteristic => {
-          let tempCharacteristic = characteristic;
-          console.log(tempCharacteristic);
-        })
-        .catch(error => {
-          showModal(error);
-      });
-    ;
-  })
-  .catch(error => {
-    showModal(error)
-  });
-}
-
-function findBtnService(server){
-  console.log('find button service');
-  server.getPrimaryService(BTN_SERVICE)
-    .then(service => {
-      service.getCharacteristic(BTN_A_STATE)
-        .then(characteristic => {
-          let btnCharacteristic = characteristic;
-          console.log(btnCharacteristic);
-        })
-        .catch(error => {
-          showModal(error);
-      });
-    ;
-  })
-  .catch(error => {
-    showModal(error)
-  });
-}
-
-
 function showModal(message) {
   document.getElementsByName("modal-message")[0].innerHTML = message;
   $("#myModal").modal("show");
+  document.getElementById('pair-btn').style.display = 'inline';
 }
