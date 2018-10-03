@@ -24,7 +24,7 @@
     </h3>
     <p>Control your Microbit's LED Matrix from the web using Bluetooth.</p>
     <p>
-      Follow instruction here for <i>How do you pair your micro:bit with another device?</i> <a href="https://makecode.microbit.org/reference/bluetooth/bluetooth-pairing" target="_blank">https://makecode.microbit.org/reference/bluetooth/bluetooth-pairing</a>
+      <b><a href="https://makecode.microbit.org/reference/bluetooth/bluetooth-pairing" target="_blank">How do you pair your micro:bit with another device?</a></b>
     </p>
     
     <div id="status-container">
@@ -34,6 +34,8 @@
   </div>
 
   <div>
+    <button onclick="pair()" id="pair-btn">Pair</button>
+    
     <div id="checkboxes">
       <div class="row justify-content-center">
         <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check00">
@@ -72,7 +74,6 @@
       </div>
     </div>
     
-    <button onclick="pair()" id="pair-btn">Pair</button>
     <div id="actions">
       <p>
         Click a checkbox! 
@@ -80,7 +81,7 @@
       <hr>
 
       <p>
-        Or enter text below
+        ...or enter text below
       </p>
       <input id="text"/>
       <button onclick="sendText()">

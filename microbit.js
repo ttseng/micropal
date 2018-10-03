@@ -1,6 +1,8 @@
 // Microbit Bluetooth documentation: https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
+
 let targetDevice = null;
 let ledMatrixStateCharacteristic = null;
+let ledTextCharacteristic = null;
 let ledService = null;
 
 // LEDS UUIDs
@@ -11,15 +13,11 @@ const LED_SCROLL = 'E95D0D2D-251D-470A-A062-FA1922DFA9A8'.toLowerCase();
 
 const services = [LED_SERVICE];
 
-/*
-BLE_NOTIFICATION_UUID = '00002902-0000-1000-8000-00805f9b34fb';
-*/
-
 const LED_MATRIX_STATE = "e95d7b77-251d-470a-a062-fa1922dfa9a8";
 
 async function pair() {  
   if (!navigator.bluetooth) {
-    showModal("Web Bluetooth is not supported.")
+    showModal("Web Bluetooth is not supported in this browser. Please try Chrome or Opera.")
     return;
   }
   // requestDevice();
@@ -117,11 +115,12 @@ function disconnect() {
 async function sendText(){
   ledTextCharacteristic = await ledService.getCharacteristic(LED_TEXT);
   let text = document.getElementById('text').value;
-  ledTextCharacteristic.writeValue(text);
+  var textEncoder = new TextEncoder();
+  ledTextCharacteristic.writeValue(textEncoder.encode(text));
 }
 
 function showModal(message) {
   document.getElementsByName("modal-message")[0].innerHTML = message;
   $("#myModal").modal("show");
-  document.getElementById('pair-btn').style.display = 'inline';
+  document.getElementById('pair-btn').style.display = 'block';
 }
