@@ -73,6 +73,9 @@ function onChangeCheckBox() {
   }
   
   ledMatrixStateCharacteristic.writeValue(generateUint8Array())
+    .then(test => {
+      console.log('writing new LED matrix value');
+    })
     .catch(error => {
     showModal(error);
     });
@@ -137,6 +140,7 @@ function connect(device) {
   device.gatt.connect()
   .then(server => {
     microbitServer = server;
+    document.getElementById('actions').style.visibility = 'visible';
     document.getElementById('pair-btn').style.display = 'none';
     document.getElementById('checkboxes').style.display = 'inline-block';
     
