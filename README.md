@@ -1,18 +1,12 @@
-# My cool website
+# Microbit BLE LED Matrix Demo
 
-This file describes your project to the community. What's your cool website about? What makes it special?
+Control the LED Matrix on your Microbit using Web BLE
 
-ヽ(๏∀๏ )ﾉ
+After pairing with your Microbit, you can click on the checkboxes to turn LEDs on and off, or you can enter in text to scroll on the display.
 
-## ← index.html
+Check out these directions on how to pair your Microbit with your browser: [https://makecode.microbit.org/reference/bluetooth/bluetooth-pairing](https://makecode.microbit.org/reference/bluetooth/bluetooth-pairing)
 
-Where you'll write the content of your website. 
+Not all browsers currently support bluetooth.  Check the compatibility of your browser here:
+[https://github.com/WebBluetoothCG/web-bluetooth/blob/master/implementation-status.md](https://github.com/WebBluetoothCG/web-bluetooth/blob/master/implementation-status.md)
 
-## ← styles.css
-
-CSS files add styling rules to your content
-
-## ← script.js
-
-If you're feeling fancy you can add interactivity to your site with Javascript
-
+Built off of [https://microbit-led.glitch.me/#](https://microbit-led.glitch.me/#)
