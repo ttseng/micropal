@@ -1,7 +1,7 @@
 body{
   background: #e8e8e8;
   padding: 50px;
-  max-width: 500px;
+  max-width: 700px;
   margin: 0 auto;
 }
 #status-container{
@@ -38,4 +38,7 @@ button{
 }
 input{
   margin-bottom: 15px
+}
+video{
+  width: 100%;
 }

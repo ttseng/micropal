@@ -30,6 +30,7 @@ async function pair() {
     });
     document.getElementById('status-container').style.display = 'inline';
     document.getElementById('pair-btn').style.display = 'none';
+    document.getElementById('video').style.display = 'none';
     
     console.log('connecting to GATT server...');
     document.getElementById('status').innerHTML = 'connecting to GATT server...';
@@ -46,7 +47,6 @@ async function pair() {
     // show UI
     document.getElementById('actions').style.visibility = 'visible';
     document.getElementById('checkboxes').style.display = 'inline-block';
-    
     document.getElementById('status-container').style.display = 'none';
     ledMatrixStateCharacteristic.writeValue(new Uint8Array(5));
     console.log('ready');
