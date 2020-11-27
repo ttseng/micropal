@@ -2,104 +2,151 @@
 <html>
 
 <head>
-  <title>Microbit LED Matrix Designer</title>
-  <meta name="description" content="Control the LED Matrix on your Microbit">
-  <link id="favicon" rel="icon" href="https://glitch.com/edit/favicon-app.ico" type="image/x-icon">
+  <title>Microbit Servo Test</title>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
   <script type="text/javascript" src="microbit.js"></script>
+  <script type="text/javascript" src="ml.js"></script>
+
+  <!-- blockly -->
+  <script src="blockly/blockly_compressed.js"></script>
+  <script src="blockly/blocks_compressed.js"></script>
+  <script src="blockly/javascript_compressed.js"></script>
+  <script src="blockly/msg/js/en.js"></script>
+
+  <script src="blockly/blocks/custom.js"></script>
+  <script src="blockly/generators/javascript/tm.js"></script>
+  <script src="blockly/generators/javascript/control.js"></script>
   
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
     crossorigin="anonymous">
   
- <link rel="stylesheet" href="styles.css">
+ <link rel="stylesheet" href="./css/style.css">
 
 </head>
 
 <body>
-  <div id="info">
-    <h3>
-      💡Microbit LED Matrix Designer
-    </h3>
-    <p>Control your Microbit's LED Matrix from the web using Bluetooth.</p>
-    
-    <p style="padding: 10px; background: white;">Load <a href="https://cdn.glitch.com/6fa6cef2-3e6a-4764-9efc-10452b84af4d%2FBBC_MICROBIT_OOB_FINAL.hex?1550077977282">this default firmware</a> onto your Microbit following the instructions <a href="https://github.com/chrisprice/bbc-microbit-web-bluetooth">here</a> to ensure you can connect your Microbit to the web using BLE.</p>
-    
+
+  <div>
+    <label for="model">Teachable Machine Model:</label>
+    <input type="text" id="model" name="model" value="https://teachablemachine.withgoogle.com/models/m3rMjtrvw/">
+  </div>
+
+  <div id="info">        
     <div id="status-container">
       <b>Status:</b> <span id="status">Awaiting pairing...</span>
     </div>
   </div>
   
-  <div id="video">
-    <video autoplay controls loop>
-      <source src="https://cdn.glitch.com/6fa6cef2-3e6a-4764-9efc-10452b84af4d%2Fmicrobit-ble-led.mp4?1539715299440">
-    </video>
+  <button onclick="pair()" id="pair-btn">Pair Microbit</button>
+
+  <hr>
+
+  <div id="predictions">
+    
   </div>
 
-  <div>
-    <button onclick="pair()" id="pair-btn">Pair</button>
-    
-    <div id="checkboxes">
-      <div class="row justify-content-center">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check00">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check01">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check02">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check03">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check04">
-      </div>
-      <div class="row justify-content-center">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check10">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check11">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check12">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check13">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check14">
-      </div>
-      <div class="row justify-content-center">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check20">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check21">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check22">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check23">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check24">
-      </div>
-      <div class="row justify-content-center">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check30">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check31">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check32">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check33">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check34">
-      </div>
-      <div class="row justify-content-center">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check40">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check41">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check42">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check43">
-        <input type="checkbox" class="m-3" onChange="onChangeCheckBox()" name="check44">
-      </div>
-    </div>
-    
-    <div id="actions">
-      <p>
-        Click a checkbox! 
-        <br> 
-        <button onclick="clearMatrix()">
-          Clear
-        </button>
-      </p>
-      <hr>
+  <div id="blockly-container"></div>
+  <div id="blockly-div" style="position: absolute"></div>
+  <div id="blockly-code"></div>
 
-      <p>
-        ...or enter text below
-      </p>
-      <input id="text"/>
-      <button onclick="sendText()">
-        Send Text
-      </button>
-    </div>
-    
+  <xml xmlns="https://developers.google.com/blockly/xml" id="toolbox" style="display: none">
+    <category name="Control" colour="#9fa55b">
+      <block type="control_wait">
+        <field name="wait">0</field>
+      </block>
+      <block type="control_repeat">
+        <field name="repeat">10</field>
+      </block>
+      <block type="control_if"></block>
+      <block type="control_repeat_until"></block>
+    </category>
+    <category name="Math" colour="#5ba58c">
+      <block type="math_number">
+        <field name="NUM">0</field>
+      </block>
+      <block type="math_arithmetic">
+        <field name="OP">ADD</field>
+        <value name="A">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="B">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_single">
+        <field name="OP">ROOT</field>
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">9</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_round">
+        <field name="OP">ROUND</field>
+        <value name="NUM">
+          <shadow type="math_number">
+            <field name="NUM">3.1</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_constrain">
+        <value name="VALUE">
+          <shadow type="math_number">
+            <field name="NUM">50</field>
+          </shadow>
+        </value>
+        <value name="LOW">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="HIGH">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+      <block type="math_random_int">
+        <value name="FROM">
+          <shadow type="math_number">
+            <field name="NUM">1</field>
+          </shadow>
+        </value>
+        <value name="TO">
+          <shadow type="math_number">
+            <field name="NUM">100</field>
+          </shadow>
+        </value>
+      </block>
+    </category>
+    <category name="Teachable Machine" colour="#5b80a5">
+      <block type="tm_load_model">
+        <field name="model_label">model url</field>
+        <field name="URL">https://teachablemachine.withgoogle.com/models/m3rMjtrvw/</field>
+      </block>
+      <block type="tm_receive_label">
+        <field name="label">OPTIONNAME</field>
+      </block>
+    </category>
+    <category name="Debug" colour="#995ba5">
+      <block type="tm_load_model">
+        <field name="model_label">model url</field>
+        <field name="URL">https://teachablemachine.withgoogle.com/models/m3rMjtrvw/</field>
+      </block>
+    </category>
+  </xml>
+  
   </div>
-  
-  
+    
 
   <!-- Modal -->
   <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -119,10 +166,8 @@
     </div>
   </div>
   
-    <!-- include the Glitch button to show what the webpage is about and
-        to make it easier for folks to view source and remix -->
-  <div class="glitchButton" style="position:fixed;top:20px;right:20px;"></div>
-  <script src="https://button.glitch.me/button.js"></script>
+
+  <script src="blocks.js"></script>
 
   <!-- Optional JavaScript -->
   <!-- jQuery first, then Popper.js, then Bootstrap JS -->

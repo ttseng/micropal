@@ -1,5 +1,5 @@
 body{
-  background: #e8e8e8;
+  background:#FFFEEE;
   padding: 50px;
   max-width: 700px;
   margin: 0 auto;
@@ -11,24 +11,12 @@ body{
   padding: 5px;
   color: white;
 }
-#actions{
-  visibility: hidden;
-  margin: 10px auto;
-}
 button{
   display: block;
   font-size: 16px;
   border-radius: 3px;
   background-color: lightgrey;
-  border: 1px solid grey;
-  box-shadow: 2px 2px teal;
   cursor: pointer;
-}
-#checkboxes{
-  display: none;
-  background: rgba(255,255,255,0.8);
-  width: 250px;
-  border-radius: 5px;
 }
 #pair-btn{
   display: block;
@@ -37,8 +25,24 @@ button{
   margin: 20px 0px;
 }
 input{
-  margin-bottom: 15px
-}
-video{
+  margin-bottom: 15px;
   width: 100%;
+}
+#predictions{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+#predictions > div{
+  margin: 10px;
+}
+.label{
+  padding: 2px 5px;
+  border-radius: 5px;
+  background-color: #cfefff;
+  margin-right: 10px;
+  border: 1px solid #cfefff;
+}
+.label.active{
+  background-color:#cfc6ff;
+  border: 1px solid #5e529d;
 }
