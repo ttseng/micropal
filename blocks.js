@@ -29,14 +29,15 @@ onresize();
 Blockly.svgResize(workspace);
 
 function updateFunction(event){
-  console.log(event.type);
+  console.log(event);
+  console.log('element: ', event.element);
   if(event.type == Blockly.Events.CREATE){
     // highlight blocks on execution
     Blockly.JavaScript.STATEMENT_PREFIX = 'highlightBlock(%1);\n';
     Blockly.JavaScript.addReservedWords('highlightBlock');
 
     let code = Blockly.JavaScript.workspaceToCode(workspace);
-    document.getElementById('blockly-code').innerHTML = code;
+    document.getElementById('blockly-code').innerText = code;
     try{
       eval(code);
     }catch(e){
