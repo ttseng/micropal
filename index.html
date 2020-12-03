@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>MicroPal</title>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js"></script>
+
+    <script src="https://unpkg.com/micromodal/dist/micromodal.min.js"></script>
+
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="./css/style.css" />
+    <link rel="stylesheet" href="./css/micromodal.css" />
+    <link rel="icon" href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/rabbit-face_1f430.png">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  </head>
+
+
+  <body>
+
+    <div class="pair-container">     
+      <button onclick="pair()" id="pair-btn">Pair Microbit</button>
+      <p class="note">Load this <a href="./firmware/microbit-bluetooth.hex" target="_blank">hex file</a> onto your Microbit before pairing.</p>
+      <div class="status-icon" title="microbit disconnected"></div>
+    </div>
+
+    <div class="model-form">
+      <label for="model">Teachable Machine Model:</label>
+      <p class="note">Use <a href="https://teachablemachine.withgoogle.com/train/audio" target="_blank">Teachable Machine</a> to train your own audio machine learning model, export it, and grab the URL.</li></p>
+      <div class="flex-container">
+        <input
+        type="text"
+        id="model"
+        name="model"
+        value="https://teachablemachine.withgoogle.com/models/uaBEemmu0/"
+      />
+        <button id="load-model-btn">Load Model</button>
+      </div>
+    </div>
+    
+    <div id="predictions" class="hidden"></div>
+
+    <div id="form-container"></div>
+
+    <!-- Modal -->
+
+    <div class="modal micromodal-slide" id="intro-modal" aria-hidden="true">
+      <div class="modal__overlay" tabindex="-1" data-micromodal-close>
+        <div class="modal__container" role="dialog" aria-modal="true" aria-labelledby="intro-modal-title">
+          <header class="modal__header">
+            <h2 class="modal__title" id="intro-modal-title">
+              MicroPal Creator
+            </h2>
+            <button class="modal__close" aria-label="Close modal" data-micromodal-close></button>
+          </header>
+          <main class="modal__content" id="intro-modal-content">
+            <p>Craft your own interactive Microbit pet that responds to your voice!</p>
+            <div class="flex-container align-center">
+              <div class="flex-item">
+                <img src="assets/tm.png"/>
+              </div>
+              <div class="flex-item">
+                <img src="assets/ui.png"/>
+              </div>
+              <div class="flex-item">
+                <video mute loop controls>
+                  <source src="assets/pet_500.mp4" type="video/mp4">
+                </video>
+              </div>
+            </div>
+
+            <div class="flex-container">
+              <div class="flex-item">
+                <div class="step">Step 1</div>
+                <div class="heading">Create an audio model in Teachable Machine</div>
+                <p>Use <a href="https://teachablemachine.withgoogle.com/train/audio" target="_blank">Teachable Machines</a> to create a machine
+                  learning model that responds to sounds.  Export the model, upload it, and grab its URL.
+                </p>
+              </div>
+              <div class="flex-item">
+                <div class="step">Step 2</div>
+                <div class="heading">Load the model and pair your Microbit.</div>
+                <p>Add the URL for your model here and pair your Microbit using Bluetooth.  Once connected,
+                  you can program the display and servo motors on Pins 1 and 2.
+                </p>
+              </div>
+              <div class="flex-item">
+                <div class="step">Step 3</div>
+                <div class="heading">Craft your pet</div>
+                <p>Get creative with craft materials to build your own custom design!
+                </p>
+              </div>
+            </div>
+            <a href="https://www.notion.so/scientiffic/MicroPal-Creator-Guide-141a70906ea5432599e21cecda2a1fac" target="_blank"><button class="info">Complete Guide</button></a>
+            <p class="note">This project is actively under development and is subject to change at any time!</p>
+          </main>
+          <footer class="modal__footer">
+            <button class="modal__btn secondary" data-micromodal-close aria-label="Close this dialog window">Close</button>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <button id="instructions-btn" class="secondary">Instructions</button>
+    
+    <!-- react -->
+    <script
+      src="https://unpkg.com/react@17/umd/react.development.js"
+      crossorigin
+    ></script>
+    <script
+      src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"
+      crossorigin
+    ></script>
+    <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+    <script type="text/javascript" src="./microbit.js"></script>
+    <script src="./programmingUI.js"></script>
+    <script src="./ml.js"></script>
+    
+    <script type="text/javascript">
+      MicroModal.init();
+      let instructionBtn = document.getElementById('instructions-btn');
+      instructionBtn.addEventListener('click', function(){
+        MicroModal.show('intro-modal');
+      });
+      
+      // instructionBtn.click();
+
+    </script>
+  </body>
+</html>
