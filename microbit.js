@@ -39,7 +39,7 @@ async function pair() {
       onMicrobitDisconnected
     )
 
-    document.querySelector('.pair-container .note').classList += ' hidden';
+    document.querySelector('.note').classList += ' hidden';
     statusIcon.classList += ' loading';
     statusIcon.title += 'pairing...';
     pairBtn.disabled = true;
@@ -56,7 +56,7 @@ async function pair() {
     pwmCharacteristic = await ioService.getCharacteristic(PWM_CHARACTERISTIC);
     ledCharacteristic = await ledService.getCharacteristic(LED_STATE);
     
-    // toggle UI
+    // toggle status icon & pair btn
     ['loading', 'success'].map(className => statusIcon.classList.toggle(className));
     statusIcon.title = 'microbit paired';
     pairBtn.disabled = false;
@@ -64,11 +64,14 @@ async function pair() {
     paired = true;
 
     // if there isn't an event form on the page already, show one for testing purposes
-    let form = React.createElement(EventForm, { label: 'test', key: 0} );
-    let formContainer = document.createElement('div');
-    formContainer.id = `form-test`;
-    document.getElementById('form-container').append(formContainer);
-    ReactDOM.render(form, document.getElementById(formContainer.id));
+    if(document.getElementById('form-container').innerHTML == ''){
+      console.log('show test form');
+      let form = React.createElement(EventForm, { label: 'test', key: 0} );
+      let formContainer = document.createElement('div');
+      formContainer.id = `form-test`;
+      document.getElementById('form-container').append(formContainer);
+      ReactDOM.render(form, document.getElementById(formContainer.id));
+    }
     
   }catch(error){
     pairBtn.classList -= 'hidden';

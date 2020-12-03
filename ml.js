@@ -12,7 +12,6 @@ let modelLoadBtn = document.getElementById('load-model-btn');
 // let form = React.createElement(EventForm, { label: 'test', key: 0} );
 // ReactDOM.render(form, document.getElementById('form-container'));
 
-
 modelLoadBtn.addEventListener('click', ()=> {
     let url = modelUrlInput.value;
     // check that it's a valid URL
