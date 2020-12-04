@@ -19,10 +19,31 @@ $teal: #5c8798;
 $large: 1080px;
 $min-width: 645px;
 
+.desktop{
+  @media screen and (max-width: $min-width){
+    display: none;
+  }
+  @media screen and (min-width: $min-width){
+    min-width: $min-width;
+  }
+}
+
+.mobile{
+  @media screen and (max-width: $min-width){
+    width: 80%;
+    margin: 0 auto;
+    h2{
+      margin: 1em 0;
+    }
+  }
+  @media screen and (min-width: $min-width){
+    display: none;
+  }
+}
+
 body {
   background: $background;
   padding: 50px 0;
-  min-width: $min-width;
   max-width: 1080px;
   margin: 0 auto;
   font-family: "Roboto", sans-serif;
