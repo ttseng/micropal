@@ -30,6 +30,7 @@
     <div class="pair-container">     
       <button onclick="pair()" id="pair-btn">Pair Microbit</button>
       <p class="note">Load this <a href="./firmware/microbit-bluetooth.hex" target="_blank">hex file</a> onto your Microbit before pairing.</p>
+      <button id="instructions-btn" class="secondary">Instructions</button>
       <div class="status-icon" title="microbit disconnected"></div>
     </div>
 
@@ -51,7 +52,7 @@
 
     <div id="form-container"></div>
 
-    <!-- Modal -->
+    <!-- Instructions Modal -->
 
     <div class="modal micromodal-slide" id="intro-modal" aria-hidden="true">
       <div class="modal__overlay" tabindex="-1" data-micromodal-close>
@@ -106,8 +107,6 @@
         </div>
       </div>
     </div>
-
-    <button id="instructions-btn" class="secondary">Instructions</button>
     
     <!-- react -->
     <script

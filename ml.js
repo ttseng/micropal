@@ -28,7 +28,8 @@ modelLoadBtn.addEventListener('click', ()=> {
 
         // disable btn
         modelLoadBtn.disabled = true;
-        modelLoadBtn.innerHTML = "Loading...";
+        modelLoadBtn.innerHTML = "Loading";
+        modelLoadBtn.classList += 'loading';
 
         // load the new classifier
         classifier = ml5.soundClassifier(url, options, modelReady);
@@ -41,11 +42,13 @@ function modelReady(){
     console.log('model ready');
     loadLabels();
 
+
     document.getElementById('predictions').classList -= 'hidden';
 
     // re-enable load button
     modelLoadBtn.disabled = false;
     modelLoadBtn.innerHTML = "Load Model";
+    modelLoadBtn.classList -= 'loading';
 
     classifier.classify(gotResult);
 }
@@ -131,7 +134,7 @@ function loadLabels(){
         let form = React.createElement(EventForm, { label: labels[i], key: i} );
         let formContainer = document.createElement('div');
         formContainer.id = `form-${trimmedLabel}`;
-        document.getElementById('form-container').append(formContainer);
+        document.getElementById('form-container').prepend(formContainer);
         ReactDOM.render(form, document.getElementById(formContainer.id));
 
         // populate predictFns

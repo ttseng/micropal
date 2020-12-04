@@ -5,18 +5,19 @@ $bordergrey: #cfcdcd;
 $blue: #007bff;
 $darkblue: #2d84e1;
 $lightblue: #cfefff;
-$background: #fafafa;
+$background: #efefef;
 $green: #93e8be;
 $darkgreen: #43da43;
-$purple: #422bb4;
+$purple:#6c4bc1;
 $lightpurple: #cfc6ff;
 $lightestpurple: #efecff;
 $yellow: #e5e576;
 $darkyellow: #c4c453;
 $black: #3d3d3d;
+$teal: #5c8798;
 
 $large: 1080px;
-$min-width: 720px;
+$min-width: 645px;
 
 body {
   background: $background;
@@ -30,10 +31,8 @@ a {
   display: inline-block;
 }
 #instructions-btn {
-  position: absolute;
-  top: 80px;
-  margin: 0;
-  right: 30px;
+  margin-left: auto;
+  margin-right: 20px;
 }
 .note {
   background: $grey;
@@ -85,7 +84,7 @@ button.secondary {
 .model-form {
   width: fit-content;
   margin: 30px 10px;
-  border: 1px solid $lightpurple;
+  border: 1px solid $purple;
   background: white;
   color: black;
   @media screen and (max-width: $min-width){
@@ -94,9 +93,10 @@ button.secondary {
   label {
     font-weight: bold;
     width: 100%;
-    background-color: $lightpurple;
+    background-color: $purple;
     padding: 10px;
     margin-bottom: 0;
+    color: white;
   }
   .flex-container {
     padding: 10px;
@@ -106,7 +106,7 @@ button.secondary {
     border-radius: 10px 0 0 10px;
     border-right: none;
     margin-right: 0;
-    min-width: 350px;
+    min-width: 80%;
     @media screen and (min-width: $large){
       width: 530px;
     }
@@ -118,7 +118,16 @@ button.secondary {
     border-radius: 0 10px 10px 0;
     margin: 0;
     &:hover {
-      background: #492fcc;
+      background:#6044a9;
+    }
+    &.loading:after{
+      overflow: hidden;
+      display: inline-block;
+      vertical-align: bottom;
+      -webkit-animation: ellipsis steps(4,end) 900ms infinite;      
+      animation: ellipsis steps(4,end) 900ms infinite;
+      content: "\2026"; /* ascii code for the ellipsis character */
+      width: 0px;
     }
   }
   .note {
@@ -179,7 +188,6 @@ textarea {
     margin-right: 10px;
   }
   .status-icon {
-    margin-left: auto;
     width: 20px;
     height: 20px;
     border-radius: 50%;
@@ -235,16 +243,23 @@ video {
   & > div {
     margin-right: 5px;
   }
+  .label{
+    background-color: $teal;
+  }
+  .label.active{
+    background-color: $purple;
+  }
 }
 .label {
   font-weight: bold;
   padding: 3px 10px;
-  background-color: #cfefff;
+  background-color: $darkgrey;
   vertical-align: top;
+  color: white;
 }
 
 .label.active {
-  background-color: $lightpurple;
+  background-color: $purple;
 }
 
 #blockly-container {
@@ -276,7 +291,7 @@ video {
 
   form {
     background: white;
-    border: 1px solid $lightblue;
+    border: 1px solid $grey;
     padding: 0;
     margin-top: 10px;
     margin-right: 10px;
@@ -301,7 +316,8 @@ video {
     .header {
       position: relative;
       width: 100%;
-      background: $lightblue;
+      background: $teal;
+      color: white;
       margin-top: 0;
       padding: 10px 10px 5px;
       .ml-label {
@@ -315,7 +331,7 @@ video {
         margin: 0;
       }
       &.active {
-        background: $lightpurple;
+        background: $purple;
       }
     }
     .add-led-btn {
@@ -427,5 +443,17 @@ video {
   }
   .modal__footer {
     float: right;
+  }
+}
+
+@keyframes ellipsis {
+  to {
+    width: 1.25em;    
+  }
+}
+
+@-webkit-keyframes ellipsis {
+  to {
+    width: 1.25em;    
   }
 }
