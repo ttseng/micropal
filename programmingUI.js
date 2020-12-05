@@ -135,14 +135,13 @@ var EventForm = function (_React$Component) {
           ),
           this.props.label != 'test' && React.createElement(
             'button',
-            { onClick: this.saveFunction, className: 'save-btn' },
+            { onClick: this.saveFunction, className: 'save-btn secondary' },
             'save'
           )
         ),
         React.createElement(
           'div',
           { className: 'params' },
-          React.createElement(ServoItem, { onChange: this.setServoSequence, value: this.state.servoSequence }),
           React.createElement(
             'div',
             { className: 'display-item-container' },
@@ -156,6 +155,7 @@ var EventForm = function (_React$Component) {
               '+'
             )
           ),
+          React.createElement(ServoItem, { onChange: this.setServoSequence, value: this.state.servoSequence }),
           React.createElement(TimingItem, { onChange: this.setTiming, value: this.state.timeDelay }),
           React.createElement(TestBtn, { onClick: this.testBtnOnClick })
         )

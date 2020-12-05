@@ -103,11 +103,10 @@ class EventForm extends React.Component {
             <label>When I receive <span className="ml-label">{this.props.label}</span></label>
             : <label>Test your Microbit here!</label>
           }
-          { this.props.label != 'test' && <button onClick={this.saveFunction} className="save-btn">save</button>}
+          { this.props.label != 'test' && <button onClick={this.saveFunction} className="save-btn secondary">save</button>}
          
         </div>
         <div className="params">
-          <ServoItem onChange={this.setServoSequence} value={this.state.servoSequence}></ServoItem>
           <div className="display-item-container">
             {
               this.state.display.map((item, index) => (
@@ -115,9 +114,9 @@ class EventForm extends React.Component {
                   removeDisplay={this.removeDisplayItem}></DisplayItem>
               ))
             }
-            
             <button className="add-led-btn" onClick={this.addDisplayItem}>+</button>
           </div>
+          <ServoItem onChange={this.setServoSequence} value={this.state.servoSequence}></ServoItem>
           <TimingItem onChange={this.setTiming} value={this.state.timeDelay}></TimingItem>
           <TestBtn onClick={this.testBtnOnClick}></TestBtn>
         </div>

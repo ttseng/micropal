@@ -1,6 +1,6 @@
 // https://teachablemachine.withgoogle.com/models/m3rMjtrvw/
 let modelUrl; // for storing the model URL
-let predict = true;
+let isPredicting = true;
 const options = {proabilityTheshold: 0.6};
 let classifier; // the ml5 classifier
 let predictFns = []; // used to store microbit responses to different inputs
@@ -68,14 +68,15 @@ function gotResult(error, result){
 
     if(isLatestModel){
         let currentLabel = result[0].label;
+        if(isPredicting){
+            console.log(currentLabel, ' ', result[0].confidence*100, '%');
     
-        console.log(currentLabel, ' ', result[0].confidence*100, '%');
-    
-        removeActiveLabels();
-        setActiveLabel(formatLabel(currentLabel));
+            removeActiveLabels();
+            setActiveLabel(formatLabel(currentLabel));
+        }
     
         try{
-            if(predict){
+            if(isPredicting){
                 predictFns[`got${formatLabel(currentLabel)}`]();     
             }
         }catch(error){
@@ -107,8 +108,7 @@ function setActiveLabel(label){
 }
 
 function clearLabels(){
-    let predictionContainer = document.getElementById('predictions');
-    predictionContainer.innerHTML = '';
+    Array.from(document.querySelectorAll('#predictions .label')).forEach((el) => el.remove());
 
     let formContainer = document.getElementById('form-container');
     formContainer.innerHTML = '';
@@ -122,13 +122,11 @@ function loadLabels(){
         let trimmedLabel = formatLabel(labels[i]);
 
         // add prediction labels
-        let div = document.createElement('div');
         let predictLabel = document.createElement('div');
         predictLabel.innerHTML = labels[i];
         predictLabel.classList += 'label ';
         predictLabel.id = trimmedLabel;
-        div.append(predictLabel);
-        container.append(div);    
+        container.prepend(predictLabel);    
 
         // create forms
         let form = React.createElement(EventForm, { label: labels[i], key: i} );
@@ -141,6 +139,18 @@ function loadLabels(){
         let fnName = `got${trimmedLabel}`;
         predictFns[fnName] = new Function([], null);
     }   
+}
+
+function togglePrediction(){
+    console.log('toggle prediction');
+    let togglePredictionBtn = document.getElementById('toggle-prediction-btn');
+    togglePredictionBtn.classList.toggle('isPredicting');
+    if(togglePredictionBtn.classList.contains('isPredicting')){
+        togglePredictionBtn.innerHTML = 'Pause Prediction';
+    }else{
+        togglePredictionBtn.innerHTML = 'Restart Prediction';
+    }
+    isPredicting = !isPredicting;
 }
 
 function validURL(str) {

@@ -1,6 +1,7 @@
 $grey: #e8e8e8;
 $darkgrey: grey;
 $grey-hover: #dad8d8;
+$grey-secondary: #373737;
 $bordergrey: #cfcdcd;
 $blue: #007bff;
 $darkblue: #2d84e1;
@@ -93,8 +94,8 @@ button.info {
 }
 
 button.secondary {
-  background: #e3e3e3;
-  color: #373737;
+  background: lightgrey;
+  color: $grey-secondary;
   border: 1px solid #b8b8b8;
   font-size: small;
   &:hover {
@@ -261,14 +262,24 @@ video {
   &.hidden {
     display: none;
   }
-  & > div {
+  .label {
+    height: fit-content;
     margin-right: 5px;
-  }
-  .label{
     background-color: $teal;
+    &.active{
+      background-color: $purple;
+    }
   }
-  .label.active{
-    background-color: $purple;
+  #toggle-prediction-btn{
+    margin-left: auto;
+    margin-bottom: 0;
+    margin-top: 0;
+    background: $purple;
+    color: white;
+    &.isPredicting{
+      background: lightgrey;
+      color: $grey-secondary
+    }
   }
 }
 .label {
@@ -344,6 +355,9 @@ video {
       .ml-label {
         font-weight: bold;
         font-family: "consolas", monospace;
+      }
+      label{
+        margin-bottom: 0;
       }
       button {
         position: absolute;
