@@ -294,28 +294,6 @@ video {
   background-color: $purple;
 }
 
-#blockly-container {
-  height: 100%;
-  width: 50%;
-  min-width: 600px;
-  max-width: 800px;
-  background: blue;
-  position: absolute;
-  top: 0;
-  left: 0;
-}
-
-#blockly-code {
-  height: 100%;
-  width: 500px;
-  position: absolute;
-  top: 0;
-  right: 0;
-  background: #e2e2ff;
-  padding: 10px;
-  overflow-wrap: break-word;
-}
-
 #form-container {
   margin: 0 10px;
   display: grid;
@@ -399,11 +377,17 @@ video {
       right: 0px;
       margin: 0;
     }
-    .servo-sequence {
-      width: 100%;
-    }
     .display-label {
       vertical-align: top;
+    }
+    .servo-container{
+      display: flex;
+      .servo-item{
+        margin-right: 5px;
+        input[type=text]{
+          width: 45px;
+        }
+      }
     }
   }
 }
@@ -490,5 +474,70 @@ video {
 @-webkit-keyframes ellipsis {
   to {
     width: 1.25em;    
+  }
+}
+
+// ANGLE INPUT
+
+.angle-input-item {
+  position: relative;
+  border-radius: 50px 50px 0 0;
+  height: 50px;
+  width: 50px;
+  border: 2px solid #ccc; 
+  margin: 0.5em 0 0;
+  cursor: pointer;
+  outline: none;
+  background: white;
+  &:focus{
+    border: 2px solid $blue;
+    cursor: pointer;
+    .angle-input-pivot::before{
+      border: 2px solid $blue;
+    }
+  }
+  &::after{
+    content: '';
+    position: absolute;
+    top: 63%;
+    left: -5%;
+    width: 109%;
+    bottom: 0px;
+    height: 20px;
+    border-top: 2px solid #ccc;
+    background: $grey;
+  }
+  &:active::after, &:focus::after{
+    border-top: 2px solid $blue;
+  }
+  .angle-input-pivot {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    margin-top: -1px;
+    height: 2px;
+    background: $darkgrey;
+    &::before{
+      content: '';
+      position: absolute;
+      right: -5px;
+      top: 50%;
+      width: 10px;
+      margin-top: -5px;
+      height: 10px;
+      border-radius: 50%;
+      background-color: $blue;
+      border: 1px solid $blue;
+    }
+    &::after{
+      content: '';
+      background: white;
+      position: absolute;
+      top: -2px;
+      left: 0px;
+      right: 50%;
+      height: 5px;
+    }
   }
 }

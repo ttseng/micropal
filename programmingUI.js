@@ -1,7 +1,5 @@
 'use strict';
 
-// default empty display to show for new led matrixes
-
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
@@ -12,6 +10,9 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
+var motorCount = 2;
+
+// default empty display to show for new led matrixes
 var defaultDisplay = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
 
 // the form created for every label in the moel
@@ -31,6 +32,7 @@ var EventForm = function (_React$Component) {
       timeDelay: 250
     };
     _this.setServoSequence = _this.setServoSequence.bind(_this);
+    _this.addServoSequence = _this.addServoSequence.bind(_this);
     _this.setDisplay = _this.setDisplay.bind(_this);
     _this.testBtnOnClick = _this.testBtnOnClick.bind(_this);
     _this.setTiming = _this.setTiming.bind(_this);
@@ -49,9 +51,17 @@ var EventForm = function (_React$Component) {
       });
     }
   }, {
+    key: 'addServoSequence',
+    value: function addServoSequence(e) {
+      // TODO
+    }
+  }, {
     key: 'setServoSequence',
     value: function setServoSequence(e) {
-      this.setState({ servoSequence: e.target.value });
+      console.log('set servo sequence with e ', e.target);
+      if (e.target) {
+        this.setState({ servoSequence: e.target.value });
+      }
     }
   }, {
     key: 'setTiming',
@@ -155,7 +165,16 @@ var EventForm = function (_React$Component) {
               '+'
             )
           ),
-          React.createElement(ServoItem, { onChange: this.setServoSequence, value: this.state.servoSequence }),
+          React.createElement(
+            'div',
+            { className: 'servo-ite-container' },
+            React.createElement(ServoItem, { onChange: this.setServoSequence, value: this.state.servoSequence }),
+            React.createElement(
+              'button',
+              { className: 'add-servo-sequence-btn', onClick: this.addServoSequence },
+              '+'
+            )
+          ),
           React.createElement(TimingItem, { onChange: this.setTiming, value: this.state.timeDelay }),
           React.createElement(TestBtn, { onClick: this.testBtnOnClick })
         )
@@ -175,32 +194,58 @@ var ServoItem = function (_React$Component2) {
   function ServoItem(props) {
     _classCallCheck(this, ServoItem);
 
-    return _possibleConstructorReturn(this, (ServoItem.__proto__ || Object.getPrototypeOf(ServoItem)).call(this, props));
+    var _this3 = _possibleConstructorReturn(this, (ServoItem.__proto__ || Object.getPrototypeOf(ServoItem)).call(this, props));
+
+    _this3.onUpdate = _this3.onUpdate.bind(_this3);
+    return _this3;
   }
 
   _createClass(ServoItem, [{
+    key: 'onUpdate',
+    value: function onUpdate(e) {
+      console.log(e);
+      this.props.onChange(e.target.value);
+    }
+  }, {
     key: 'render',
     value: function render() {
+      var contents = [];
+      for (var i = 0; i < motorCount; i++) {
+        contents.push(React.createElement(
+          'div',
+          { className: 'servo-item item', key: i },
+          React.createElement(
+            'div',
+            null,
+            React.createElement(
+              'label',
+              null,
+              'Servo ',
+              i + 1,
+              ':'
+            )
+          ),
+          React.createElement('input', { type: 'text',
+            value: this.props.value,
+            onChange: this.onUpdate,
+            className: 'servo-input',
+            placeholder: '90',
+            name: 'servo-input'
+          }),
+          '  ',
+          React.createElement(
+            'label',
+            null,
+            '\xB0'
+          ),
+          React.createElement('div', { className: 'angle-input-item' })
+        ));
+      }
+
       return React.createElement(
         'div',
-        { className: 'item' },
-        React.createElement(
-          'label',
-          null,
-          'Servo sequence: '
-        ),
-        React.createElement('input', { type: 'text',
-          value: this.props.value,
-          onChange: this.props.onChange,
-          className: 'servo-sequence',
-          placeholder: '[90, 90]',
-          name: 'servo-sequence'
-        }),
-        React.createElement(
-          'div',
-          { className: 'small' },
-          '[motor-1-angle, motor-2-angle], ...'
-        )
+        { className: 'servo-container' },
+        contents
       );
     }
   }]);
