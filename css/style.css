@@ -99,14 +99,20 @@ button.secondary:hover {
   background-color: #dad8d8;
 }
 
+label {
+  font-family: "JetBrains Mono", monospace;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
 .model-form {
   width: -webkit-fit-content;
   width: -moz-fit-content;
   width: fit-content;
   margin: 30px 10px;
-  border: 1px solid #6c4bc1;
   background: white;
   color: black;
+  border: 1px solid #6c4bc1;
 }
 
 @media screen and (max-width: 645px) {
@@ -193,7 +199,7 @@ select,
 textarea {
   font-family: "consolas", monospace;
   border-radius: 10px;
-  padding: 5px;
+  padding: 3px 7px;
   border: 2px solid #cfcdcd;
   background: white;
 }
@@ -231,9 +237,19 @@ textarea {
   margin-right: 10px;
 }
 
+.pair-container .pair-items {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 .pair-container .status-icon {
   width: 20px;
   height: 20px;
+  margin-right: 10px;
   border-radius: 50%;
   background: #e8e8e8;
   border: 4px solid grey;
@@ -254,7 +270,7 @@ textarea {
   margin: 0;
   padding: 0.05em 0.8em;
   margin-right: 10px;
-  background: #18a87a;
+  background: #2c9c78;
   color: white;
   border-color: #129268;
 }
@@ -343,7 +359,7 @@ video {
 
 #form-container form {
   background: white;
-  border: 1px solid #e8e8e8;
+  border: 1px solid #5c8798;
   padding: 0;
   margin-top: 10px;
   margin-right: 10px;
@@ -357,6 +373,7 @@ video {
   margin: 10px 0;
   background-color: #e8e8e8;
   position: relative;
+  border-radius: 5px;
 }
 
 #form-container form .delete-btn {
@@ -375,7 +392,7 @@ video {
   background: #5c8798;
   color: white;
   margin-top: 0;
-  padding: 10px 10px 5px;
+  padding: 10px 10px;
 }
 
 #form-container form .header .ml-label {
@@ -414,6 +431,7 @@ video {
 }
 
 #form-container form .display-item-container .item {
+  border-radius: 5px;
   margin: 0px 10px 10px 0;
   min-width: 155px;
 }
@@ -431,8 +449,10 @@ video {
 }
 
 #form-container form .params label {
-  font-family: "consolas", monospace;
+  font-family: "JetBrains Mono", monospace;
   margin-bottom: 0;
+  font-weight: bold;
+  font-size: 14px;
 }
 
 #form-container form .test-btn {
@@ -465,11 +485,14 @@ video {
   margin-right: 5px;
   position: relative;
   margin-bottom: 5px;
+  border-radius: 5px;
+  background: #e8e8e8;
 }
 
 #form-container form .servo-item-container .servo-container label {
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
   grid-column: auto / span 2;
-  background: #e8e8e8;
   padding: 10px 40px 0 10px;
   margin-bottom: 0;
 }
@@ -482,8 +505,9 @@ video {
 }
 
 #form-container form .servo-item-container .servo-container .servo-item label {
+  font-weight: normal;
+  font-size: 11px;
   padding: 0;
-  font-size: small;
 }
 
 #form-container form .servo-item-container .servo-container .servo-item input[type=text] {
@@ -610,12 +634,7 @@ video {
 }
 
 .angle-input-item:focus {
-  border: 2px solid #007bff;
   cursor: pointer;
-}
-
-.angle-input-item:focus .angle-input-pivot::before {
-  border: 2px solid #007bff;
 }
 
 .angle-input-item::after {
@@ -628,10 +647,6 @@ video {
   height: 19px;
   border-top: 2px solid #ccc;
   background: #e8e8e8;
-}
-
-.angle-input-item:active::after, .angle-input-item:focus::after {
-  border-top: 2px solid #007bff;
 }
 
 .angle-input-item .angle-input-pivot {

@@ -32,17 +32,20 @@
     href="https://emojipedia-us.s3.dualstack.us-west-1.amazonaws.com/thumbs/120/google/263/rabbit-face_1f430.png">
   <link rel="preconnect" href="https://fonts.gstatic.com">
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700;800&display=swap" rel="stylesheet">
 </head>
 
 
 <body>
   <div class="desktop">
     <div class="pair-container">
-      <button onclick="pair()" id="pair-btn">Pair Microbit</button>
+      <div class="pair-items">
+        <div class="status-icon" title="microbit disconnected"></div>
+        <button onclick="pair()" id="pair-btn">Pair Microbit</button>
+      </div>
       <p class="note">Load this <a href="./firmware/microbit-bluetooth.hex" target="_blank">hex file</a> onto your
         Microbit before pairing.</p>
       <button id="instructions-btn" class="secondary">Instructions</button>
-      <div class="status-icon" title="microbit disconnected"></div>
     </div>
 
     <div class="model-form">
@@ -153,7 +156,7 @@
       MicroModal.show('intro-modal');
     });
 
-    // instructionBtn.click();
+    instructionBtn.click();
 
   </script>
 </body>

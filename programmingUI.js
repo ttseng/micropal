@@ -274,7 +274,7 @@ var ServoItem = function (_React$Component2) {
       var _loop = function _loop(motorIndex) {
         contents.push(React.createElement(
           'div',
-          { className: "servo-item item motor-index-" + motorIndex, key: motorIndex },
+          { className: "servo-item motor-index-" + motorIndex, key: motorIndex },
           React.createElement(
             'div',
             null,

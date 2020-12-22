@@ -103,12 +103,18 @@ button.secondary {
   }
 }
 
+label{
+  font-family: "JetBrains Mono", monospace;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
 .model-form {
   width: fit-content;
   margin: 30px 10px;
-  border: 1px solid $purple;
   background: white;
   color: black;
+  border: 1px solid $purple;
   @media screen and (max-width: $min-width){
     width: 500px;
   }
@@ -179,7 +185,7 @@ select,
 textarea {
   font-family: "consolas", monospace;
   border-radius: 10px;
-  padding: 5px;
+  padding: 3px 7px;
   border: 2px solid $bordergrey;
   background: white;
 }
@@ -209,9 +215,14 @@ textarea {
   & > * {
     margin-right: 10px;
   }
+  .pair-items{
+    display: flex;
+    align-items: center;
+  }
   .status-icon {
     width: 20px;
     height: 20px;
+    margin-right: 10px;
     border-radius: 50%;
     background: $grey;
     border: 4px solid $darkgrey;
@@ -229,7 +240,7 @@ textarea {
     margin: 0;
     padding: 0.05em 0.8em;
     margin-right: 10px;
-    background: #18a87a;
+    background: #2c9c78;
     color: white;
     border-color: #129268;
   }
@@ -301,7 +312,7 @@ video {
 
   form {
     background: white;
-    border: 1px solid $grey;
+    border: 1px solid #5c8798;
     padding: 0;
     margin-top: 10px;
     margin-right: 10px;
@@ -312,6 +323,7 @@ video {
       margin: 10px 0;
       background-color: $grey;
       position: relative;
+      border-radius: 5px;
     }
     .delete-btn{
       position: absolute;
@@ -328,7 +340,7 @@ video {
       background: $teal;
       color: white;
       margin-top: 0;
-      padding: 10px 10px 5px;
+      padding: 10px 10px;
       .ml-label {
         font-weight: bold;
         font-family: "consolas", monospace;
@@ -354,6 +366,7 @@ video {
       flex-wrap: wrap;
       align-items: center;
       .item {
+        border-radius: 5px;
         margin: 0px 10px 10px 0;
         min-width: 155px;
       }
@@ -366,8 +379,10 @@ video {
       margin: 20px;
       position: relative;
       label {
-        font-family: "consolas", monospace;
+        font-family: "JetBrains Mono", monospace;
         margin-bottom: 0;
+        font-weight: bold;
+        font-size: 14px;
       }
     }
     .test-btn {
@@ -389,9 +404,12 @@ video {
         margin-right: 5px;
         position: relative;
         margin-bottom: 5px;
+        border-radius: 5px;
+        background: $grey;
         label{
+          border-top-left-radius: 5px;
+          border-top-right-radius: 5px;
           grid-column: auto / span 2;
-          background: $grey;
           padding: 10px 40px 0 10px;
           margin-bottom: 0;
         }
@@ -401,8 +419,9 @@ video {
           padding: 0 10px;
           width: auto;
           label{
+            font-weight: normal;
+            font-size: 11px;
             padding: 0;
-            font-size: small;
           }
           input[type=text]{
             width: 45px;
@@ -511,11 +530,7 @@ video {
   outline: none;
   background: white;
   &:focus{
-    border: 2px solid $blue;
     cursor: pointer;
-    .angle-input-pivot::before{
-      border: 2px solid $blue;
-    }
   }
   &::after{
     content: '';
@@ -527,9 +542,6 @@ video {
     height: 19px;
     border-top: 2px solid #ccc;
     background: $grey;
-  }
-  &:active::after, &:focus::after{
-    border-top: 2px solid $blue;
   }
   .angle-input-pivot {
     position: absolute;

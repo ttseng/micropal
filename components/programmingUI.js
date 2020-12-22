@@ -209,7 +209,7 @@ class ServoItem extends React.Component {
     let contents = [];
     for (let motorIndex = 0; motorIndex < motorCount; motorIndex++) {
       contents.push(
-        <div className={"servo-item item motor-index-" + motorIndex} key={motorIndex}>
+        <div className={"servo-item motor-index-" + motorIndex} key={motorIndex}>
           <div>
             <label>Motor {motorIndex + 1}</label>
           </div>

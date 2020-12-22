@@ -1,5 +1,4 @@
 // Microbit Bluetooth documentation: https://lancaster-university.github.io/microbit-docs/resources/bluetooth/bluetooth_profile.html
-// Sample: https://github.com/thegecko/microbit-web-bluetooth/blob/master/src/services/io-pin.ts
 
 let targetDevice = null;
 let ioService = null;
@@ -157,21 +156,22 @@ function servoSequence(sequence, timeDelay){
   }
 }
 
+// reference: https://github.com/thegecko/microbit-web-bluetooth/blob/master/src/services/io-pin.ts
 async function setServoPosition(angles){
-  let pos1 = position(angles[0]);
-  let pos2 = position(angles[1]);
+  let pos1 = position(angles[0]); // angle for motor 1
+  let pos2 = position(angles[1]); // angle for motor 2
   let val1 = new DataView(new ArrayBuffer(7));
   val1.setUint8(0, 1); // pin one
-  val1.setUint16(1, pos1, true); // ranges from 250(left) to 53 (right)
+  val1.setUint16(1, pos1, true); // ranges from 250(left) to 50 (right)
   val1.setUint32(3, 10000, true); // period in microseconds
 
   let val2 = new DataView(new ArrayBuffer(7));
   val2.setUint8(0, 2); // pin one
-  val2.setUint16(1, pos2, true); // ranges from 250(left) to 53 (right)
+  val2.setUint16(1, pos2, true); // ranges from 250(left) to 50 (right)
   val2.setUint32(3, 10000, true); // period in microseconds
 
   // TODO: what's the relationship between range and period?
-
+  console.log('write servo values');
   pwmCharacteristic.writeValue(val1);
   setTimeout(() => pwmCharacteristic.writeValue(val2), 100);
 }
@@ -197,7 +197,7 @@ function boolArrayToByte(bools) {
 }
 
 function position(angle){
-  return map(angle, 0, 180, 250, 54);
+  return map(angle, 0, 180, 250, 53);
 }
 
 function map( x,  in_min,  in_max,  out_min,  out_max){
