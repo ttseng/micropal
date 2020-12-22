@@ -9,8 +9,8 @@ let modelUrlInput = document.querySelector('input#model');
 let modelLoadBtn = document.getElementById('load-model-btn');
 
 //TODO remove after testing
-let form = React.createElement(EventForm, { label: 'test', key: 0} );
-ReactDOM.render(form, document.getElementById('form-container'));
+// let form = React.createElement(EventForm, { label: 'test', key: 0} );
+// ReactDOM.render(form, document.getElementById('form-container'));
 
 modelLoadBtn.addEventListener('click', ()=> {
     let url = modelUrlInput.value;
