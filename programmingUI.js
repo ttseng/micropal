@@ -224,7 +224,11 @@ var ServoItem = function (_React$Component2) {
 
     _this3.onUpdate = function (sequenceIndex, motorIndex, e) {
       e.preventDefault();
-      // console.log('in update with index ', motorIndex, ' value: ', e.target.value);
+      if (e.target.value.length == 0) {
+        e.target.value = 0;
+      } else if (parseInt(e.target.value) > 180) {
+        e.target.value = 180;
+      }
       this.props.onChange(sequenceIndex, motorIndex, e.target.value);
       var angleInput = this.state.angleInputs[motorIndex].querySelector('.angle-input-pivot');
       var angleInputValue = angleInput.style.transform.replace('rotate(', '').replace('deg)', '');
