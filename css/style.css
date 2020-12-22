@@ -356,11 +356,10 @@ video {
   padding: 5px 10px;
   margin: 10px 0;
   background-color: #e8e8e8;
-  border-radius: 5px;
   position: relative;
 }
 
-#form-container form .item .delete-display-btn {
+#form-container form .delete-btn {
   position: absolute;
   top: 0;
   right: 0;
@@ -399,7 +398,7 @@ video {
   background: #6c4bc1;
 }
 
-#form-container form .add-led-btn {
+#form-container form .add-btn {
   border-radius: 5px;
 }
 
@@ -447,17 +446,47 @@ video {
   vertical-align: top;
 }
 
-#form-container form .servo-container {
+#form-container form .servo-item-container {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
 }
 
-#form-container form .servo-container .servo-item {
+#form-container form .servo-item-container .servo-container {
+  display: -ms-grid;
+  display: grid;
+  -ms-grid-columns: 1fr 1fr;
+      grid-template-columns: 1fr 1fr;
   margin-right: 5px;
+  position: relative;
+  margin-bottom: 5px;
 }
 
-#form-container form .servo-container .servo-item input[type=text] {
+#form-container form .servo-item-container .servo-container label {
+  grid-column: auto / span 2;
+  background: #e8e8e8;
+  padding: 10px 40px 0 10px;
+  margin-bottom: 0;
+}
+
+#form-container form .servo-item-container .servo-container .servo-item {
+  margin-top: 0;
+  margin-bottom: 0;
+  padding: 0 10px;
+  width: auto;
+}
+
+#form-container form .servo-item-container .servo-container .servo-item label {
+  padding: 0;
+  font-size: small;
+}
+
+#form-container form .servo-item-container .servo-container .servo-item input[type=text] {
   width: 45px;
 }
 
@@ -594,9 +623,9 @@ video {
   position: absolute;
   top: 63%;
   left: -5%;
-  width: 109%;
+  width: 110%;
   bottom: 0px;
-  height: 20px;
+  height: 19px;
   border-top: 2px solid #ccc;
   background: #e8e8e8;
 }

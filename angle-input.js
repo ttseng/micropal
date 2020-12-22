@@ -107,7 +107,9 @@ function AngleInput($dom, options) {
     // the input field for the servo motor
     let parentInput = $input.parentElement.parentElement.querySelector('input[type=text]');
     if(parentInput){
-      parentInput.value = Math.abs(180-value);
+      let nativeValueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, "value").set;
+      nativeValueSetter.call(parentInput, Math.abs(180-value));
+      parentInput.dispatchEvent(new Event('input', { bubbles: true }));
     }
   }
 

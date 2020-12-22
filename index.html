@@ -145,23 +145,6 @@
   <script src="./programmingUI.js"></script>
   <script src="./angle-input.js"></script>
   <script src="./ml.js"></script>
-
-  <!-- for testing purposes -->
-  <script>
-
-    let angleOptions = {
-      max: 180,
-      min: 0,
-      step: 1
-    }
-
-    let angleInputs = document.querySelectorAll('.angle-input-item');
-    angleInputs.forEach((input) =>{
-      console.log('load angle input');
-      let item = AngleInput(input, angleOptions);
-      item(180); // set default value
-    });
-  </script>
   
   <script type="text/javascript">
     MicroModal.init();

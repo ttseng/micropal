@@ -69,7 +69,7 @@ function gotResult(error, result){
     if(isLatestModel){
         let currentLabel = result[0].label;
         if(isPredicting){
-            console.log(currentLabel, ' ', result[0].confidence*100, '%');
+            // console.log(currentLabel, ' ', result[0].confidence*100, '%');
     
             removeActiveLabels();
             setActiveLabel(formatLabel(currentLabel));

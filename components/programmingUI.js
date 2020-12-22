@@ -11,18 +11,21 @@ let defaultDisplay = [
   [0, 0, 0, 0, 0]
 ];
 
+let defaultServoSequence = [0, 0]; 
+
 // the form created for every label in the moel
 class EventForm extends React.Component {
   constructor(props) {
     super(props);
     this.saveFunction = this.saveFunction.bind(this);
     this.state = {
-      servoSequence: [],
+      servoSequence: [[0,0]],
       display: [JSON.parse(JSON.stringify(defaultDisplay))],
       timeDelay: 250,
     }
     this.setServoSequence = this.setServoSequence.bind(this);
-    this.addServoSequence = this.addServoSequence.bind(this);
+    this.addServoItem = this.addServoItem.bind(this);
+    this.removeServoItem = this.removeServoItem.bind(this);
     this.setDisplay = this.setDisplay.bind(this);
     this.testBtnOnClick = this.testBtnOnClick.bind(this);
     this.setTiming = this.setTiming.bind(this);
@@ -38,15 +41,32 @@ class EventForm extends React.Component {
     });
   }
 
-  addServoSequence(e) {
-    // TODO
+  setServoSequence(servoIndex, motorIndex, value) {
+    let newServoSequence = [...this.state.servoSequence];
+    newServoSequence[servoIndex][motorIndex] = parseInt(value);
+    this.setState({ servoSequence: newServoSequence });
   }
 
-  setServoSequence(e) {
-    console.log('set servo sequence with e ', e.target);
-    if (e.target) {
-      this.setState({ servoSequence: e.target.value });
-    }
+  addServoItem(e) {
+    e.preventDefault();
+    let newServoSequence = [...this.state.servoSequence];
+    newServoSequence.push(JSON.parse(JSON.stringify(defaultServoSequence)));
+    this.setState({
+      servoSequence: newServoSequence
+    });
+  }
+
+  removeServoItem(e) {
+    e.preventDefault();
+    let indexToRemove = parseInt(e.target.getAttribute('index'));
+    console.log('remove index: ', indexToRemove);
+    let newServoSequence = [...this.state.servoSequence];
+    console.log('oldServoSequence: ', [...newServoSequence]);
+    newServoSequence.splice(indexToRemove, 1);
+    console.log('newServoSequence: ', newServoSequence);
+    this.setState({
+      servoSequence: newServoSequence
+    });
   }
 
   setTiming(e) {
@@ -79,10 +99,10 @@ class EventForm extends React.Component {
     e.preventDefault();
     if (paired) {
       let fn =
-        ` servoSequence([${this.state.servoSequence}], ${this.state.timeDelay});
+        ` servoSequence(${JSON.stringify(this.state.servoSequence)}, ${this.state.timeDelay});
         writeDisplay(${JSON.stringify(this.state.display)}, ${this.state.timeDelay});
       `;
-      // console.log('fn: ', fn);
+      console.log('fn: ', fn);
       try {
         eval(fn);
       } catch (error) {
@@ -98,7 +118,7 @@ class EventForm extends React.Component {
     let fnName = `got${formatLabel(this.props.label)}`;
 
     let newFunction =
-      `servoSequence([${this.state.servoSequence}], ${this.state.timeDelay});
+      `servoSequence([[${this.state.servoSequence}]], ${this.state.timeDelay});
        writeDisplay(${JSON.stringify(this.state.display)}, ${this.state.timeDelay});
       `;
 
@@ -124,11 +144,16 @@ class EventForm extends React.Component {
                   removeDisplay={this.removeDisplayItem}></DisplayItem>
               ))
             }
-            <button className="add-led-btn" onClick={this.addDisplayItem}>+</button>
+            <button className="add-btn" onClick={this.addDisplayItem}>+</button>
           </div>
-          <div className="servo-ite-container">
-            <ServoItem onChange={this.setServoSequence} value={this.state.servoSequence}></ServoItem>
-            <button className="add-servo-sequence-btn" onClick={this.addServoSequence}>+</button>
+          <div className="servo-item-container">
+            {
+              this.state.servoSequence.map((item, index) => (
+                <ServoItem key={index} sequenceIndex={index} onChange={this.setServoSequence} 
+                removeItem={this.removeServoItem} value={this.state.servoSequence[index]}></ServoItem>
+              ))
+            }
+            <button className="add-btn" onClick={this.addServoItem}>+</button>
           </div>
           <TimingItem onChange={this.setTiming} value={this.state.timeDelay}></TimingItem>
           <TestBtn onClick={this.testBtnOnClick}></TestBtn>
@@ -143,35 +168,69 @@ class ServoItem extends React.Component {
   constructor(props) {
     super(props);
     this.onUpdate = this.onUpdate.bind(this);
+    this.state = {
+      angleInputs: []
+    }
   }
 
-  onUpdate(e) {
-    console.log(e);
-    this.props.onChange(e.target.value);
+  // needed to trigger onchange when programmatically setting the angle value in the input field
+  onUpdate = function(sequenceIndex, motorIndex, e) {
+    // console.log('in update with index ', motorIndex, ' value: ', e.target.value);
+    this.props.onChange(sequenceIndex, motorIndex, e.target.value);
+    let angleInput = this.state.angleInputs[motorIndex].querySelector('.angle-input-pivot');
+    let angleInputValue = angleInput.style.transform.replace('rotate(', '').replace('deg)', '');
+    let textInputValue = e.target.value;
+
+    // when user enters value into text field
+    if(parseInt(textInputValue) !== 180+parseInt(angleInputValue)){
+      // values are not the same
+      angleInput.style.transform = `rotate(-${180-parseInt(textInputValue)}deg)`;
+    }
+  }
+
+  componentDidMount =  function(){
+    let angleOptions = {
+      max: 180,
+      min: 0,
+      step: 1
+    }
+    // loading new inputs
+    let angleInputs = document.querySelectorAll('.angle-input-item.new');
+    angleInputs.forEach((input) =>{
+      this.state.angleInputs.push(input);
+      let item = AngleInput(input, angleOptions);
+      item(0); // set default value
+      input.classList.remove('new');
+    });
   }
 
   render() {
     let contents = [];
-    for (let i = 0; i < motorCount; i++) {
+    for (let motorIndex = 0; motorIndex < motorCount; motorIndex++) {
       contents.push(
-        <div className="servo-item item" key={i}>
+        <div className={"servo-item item motor-index-" + motorIndex} key={motorIndex}>
           <div>
-            <label>Servo {i + 1}:</label>
+            <label>Motor {motorIndex + 1}</label>
           </div>
           <input type="text"
-            value={this.props.value}
-            onChange={this.onUpdate}
+            value={this.props.value[motorIndex]}
+            onChange={(e) => this.onUpdate(this.props.sequenceIndex, motorIndex, e)}
+            index={this.props.index}
             className="servo-input"
             placeholder="90"
             name="servo-input"
           />  <label>°</label>
-          <div className="angle-input-item"></div>
+          <div className={"angle-input-item new"}></div>
         </div>
       );
     }
 
     return (
-      <div className="servo-container">
+      <div className={"servo-container servo-index-" + this.props.sequenceIndex}>
+        <label>Servo Rotation: </label>
+        {this.props.sequenceIndex !== 0 &&
+          <button className="delete-btn secondary" index={this.props.sequenceIndex} onClick={this.props.removeItem}>x</button>
+        }
         {contents}
       </div>
     );
@@ -204,7 +263,7 @@ class DisplayItem extends React.Component {
           {matrix}
         </div>
         {this.props.index !== 0 &&
-          <button className="delete-display-btn secondary" index={this.props.index} onClick={this.props.removeDisplay}>x</button>
+          <button className="delete-btn secondary" index={this.props.index} onClick={this.props.removeDisplay}>x</button>
         }
       </div>
     );

@@ -15,6 +15,8 @@ var motorCount = 2;
 // default empty display to show for new led matrixes
 var defaultDisplay = [[0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0], [0, 0, 0, 0, 0]];
 
+var defaultServoSequence = [0, 0];
+
 // the form created for every label in the moel
 
 var EventForm = function (_React$Component) {
@@ -27,12 +29,13 @@ var EventForm = function (_React$Component) {
 
     _this.saveFunction = _this.saveFunction.bind(_this);
     _this.state = {
-      servoSequence: [],
+      servoSequence: [[0, 0]],
       display: [JSON.parse(JSON.stringify(defaultDisplay))],
       timeDelay: 250
     };
     _this.setServoSequence = _this.setServoSequence.bind(_this);
-    _this.addServoSequence = _this.addServoSequence.bind(_this);
+    _this.addServoItem = _this.addServoItem.bind(_this);
+    _this.removeServoItem = _this.removeServoItem.bind(_this);
     _this.setDisplay = _this.setDisplay.bind(_this);
     _this.testBtnOnClick = _this.testBtnOnClick.bind(_this);
     _this.setTiming = _this.setTiming.bind(_this);
@@ -51,17 +54,35 @@ var EventForm = function (_React$Component) {
       });
     }
   }, {
-    key: 'addServoSequence',
-    value: function addServoSequence(e) {
-      // TODO
+    key: 'setServoSequence',
+    value: function setServoSequence(servoIndex, motorIndex, value) {
+      var newServoSequence = [].concat(_toConsumableArray(this.state.servoSequence));
+      newServoSequence[servoIndex][motorIndex] = parseInt(value);
+      this.setState({ servoSequence: newServoSequence });
     }
   }, {
-    key: 'setServoSequence',
-    value: function setServoSequence(e) {
-      console.log('set servo sequence with e ', e.target);
-      if (e.target) {
-        this.setState({ servoSequence: e.target.value });
-      }
+    key: 'addServoItem',
+    value: function addServoItem(e) {
+      e.preventDefault();
+      var newServoSequence = [].concat(_toConsumableArray(this.state.servoSequence));
+      newServoSequence.push(JSON.parse(JSON.stringify(defaultServoSequence)));
+      this.setState({
+        servoSequence: newServoSequence
+      });
+    }
+  }, {
+    key: 'removeServoItem',
+    value: function removeServoItem(e) {
+      e.preventDefault();
+      var indexToRemove = parseInt(e.target.getAttribute('index'));
+      console.log('remove index: ', indexToRemove);
+      var newServoSequence = [].concat(_toConsumableArray(this.state.servoSequence));
+      console.log('oldServoSequence: ', [].concat(_toConsumableArray(newServoSequence)));
+      newServoSequence.splice(indexToRemove, 1);
+      console.log('newServoSequence: ', newServoSequence);
+      this.setState({
+        servoSequence: newServoSequence
+      });
     }
   }, {
     key: 'setTiming',
@@ -97,8 +118,8 @@ var EventForm = function (_React$Component) {
     value: function testBtnOnClick(e) {
       e.preventDefault();
       if (paired) {
-        var fn = ' servoSequence([' + this.state.servoSequence + '], ' + this.state.timeDelay + ');\n        writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
-        // console.log('fn: ', fn);
+        var fn = ' servoSequence(' + JSON.stringify(this.state.servoSequence) + ', ' + this.state.timeDelay + ');\n        writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
+        console.log('fn: ', fn);
         try {
           eval(fn);
         } catch (error) {
@@ -114,7 +135,7 @@ var EventForm = function (_React$Component) {
       e.preventDefault();
       var fnName = 'got' + formatLabel(this.props.label);
 
-      var newFunction = 'servoSequence([' + this.state.servoSequence + '], ' + this.state.timeDelay + ');\n       writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
+      var newFunction = 'servoSequence([[' + this.state.servoSequence + ']], ' + this.state.timeDelay + ');\n       writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
 
       predictFns[fnName] = new Function([], newFunction);
     }
@@ -161,17 +182,20 @@ var EventForm = function (_React$Component) {
             }),
             React.createElement(
               'button',
-              { className: 'add-led-btn', onClick: this.addDisplayItem },
+              { className: 'add-btn', onClick: this.addDisplayItem },
               '+'
             )
           ),
           React.createElement(
             'div',
-            { className: 'servo-ite-container' },
-            React.createElement(ServoItem, { onChange: this.setServoSequence, value: this.state.servoSequence }),
+            { className: 'servo-item-container' },
+            this.state.servoSequence.map(function (item, index) {
+              return React.createElement(ServoItem, { key: index, sequenceIndex: index, onChange: _this2.setServoSequence,
+                removeItem: _this2.removeServoItem, value: _this2.state.servoSequence[index] });
+            }),
             React.createElement(
               'button',
-              { className: 'add-servo-sequence-btn', onClick: this.addServoSequence },
+              { className: 'add-btn', onClick: this.addServoItem },
               '+'
             )
           ),
@@ -196,38 +220,74 @@ var ServoItem = function (_React$Component2) {
 
     var _this3 = _possibleConstructorReturn(this, (ServoItem.__proto__ || Object.getPrototypeOf(ServoItem)).call(this, props));
 
+    _this3.onUpdate = function (sequenceIndex, motorIndex, e) {
+      // console.log('in update with index ', motorIndex, ' value: ', e.target.value);
+      this.props.onChange(sequenceIndex, motorIndex, e.target.value);
+      var angleInput = this.state.angleInputs[motorIndex].querySelector('.angle-input-pivot');
+      var angleInputValue = angleInput.style.transform.replace('rotate(', '').replace('deg)', '');
+      var textInputValue = e.target.value;
+
+      // when user enters value into text field
+      if (parseInt(textInputValue) !== 180 + parseInt(angleInputValue)) {
+        // values are not the same
+        angleInput.style.transform = 'rotate(-' + (180 - parseInt(textInputValue)) + 'deg)';
+      }
+    };
+
+    _this3.componentDidMount = function () {
+      var _this4 = this;
+
+      var angleOptions = {
+        max: 180,
+        min: 0,
+        step: 1
+        // loading new inputs
+      };var angleInputs = document.querySelectorAll('.angle-input-item.new');
+      angleInputs.forEach(function (input) {
+        _this4.state.angleInputs.push(input);
+        var item = AngleInput(input, angleOptions);
+        item(0); // set default value
+        input.classList.remove('new');
+      });
+    };
+
     _this3.onUpdate = _this3.onUpdate.bind(_this3);
+    _this3.state = {
+      angleInputs: []
+    };
     return _this3;
   }
 
+  // needed to trigger onchange when programmatically setting the angle value in the input field
+
+
   _createClass(ServoItem, [{
-    key: 'onUpdate',
-    value: function onUpdate(e) {
-      console.log(e);
-      this.props.onChange(e.target.value);
-    }
-  }, {
     key: 'render',
     value: function render() {
+      var _this5 = this;
+
       var contents = [];
-      for (var i = 0; i < motorCount; i++) {
+
+      var _loop = function _loop(motorIndex) {
         contents.push(React.createElement(
           'div',
-          { className: 'servo-item item', key: i },
+          { className: "servo-item item motor-index-" + motorIndex, key: motorIndex },
           React.createElement(
             'div',
             null,
             React.createElement(
               'label',
               null,
-              'Servo ',
-              i + 1,
-              ':'
+              'Motor ',
+              motorIndex + 1
             )
           ),
           React.createElement('input', { type: 'text',
-            value: this.props.value,
-            onChange: this.onUpdate,
+            value: _this5.props.value[motorIndex],
+            onChange: function onChange(e) {
+              return _this5.onUpdate(_this5.props.sequenceIndex, motorIndex, e);
+            },
+            index: _this5.props.index,
             className: 'servo-input',
             placeholder: '90',
             name: 'servo-input'
@@ -238,13 +298,27 @@ var ServoItem = function (_React$Component2) {
             null,
             '\xB0'
           ),
-          React.createElement('div', { className: 'angle-input-item' })
+          React.createElement('div', { className: "angle-input-item new" })
         ));
+      };
+
+      for (var motorIndex = 0; motorIndex < motorCount; motorIndex++) {
+        _loop(motorIndex);
       }
 
       return React.createElement(
         'div',
-        { className: 'servo-container' },
+        { className: "servo-container servo-index-" + this.props.sequenceIndex },
+        React.createElement(
+          'label',
+          null,
+          'Servo Rotation: '
+        ),
+        this.props.sequenceIndex !== 0 && React.createElement(
+          'button',
+          { className: 'delete-btn secondary', index: this.props.sequenceIndex, onClick: this.props.removeItem },
+          'x'
+        ),
         contents
       );
     }
@@ -293,7 +367,7 @@ var DisplayItem = function (_React$Component3) {
         ),
         this.props.index !== 0 && React.createElement(
           'button',
-          { className: 'delete-display-btn secondary', index: this.props.index, onClick: this.props.removeDisplay },
+          { className: 'delete-btn secondary', index: this.props.index, onClick: this.props.removeDisplay },
           'x'
         )
       );
@@ -312,10 +386,10 @@ var Led = function (_React$Component4) {
   function Led(props) {
     _classCallCheck(this, Led);
 
-    var _this5 = _possibleConstructorReturn(this, (Led.__proto__ || Object.getPrototypeOf(Led)).call(this, props));
+    var _this7 = _possibleConstructorReturn(this, (Led.__proto__ || Object.getPrototypeOf(Led)).call(this, props));
 
-    _this5.handleClick = _this5.handleClick.bind(_this5);
-    return _this5;
+    _this7.handleClick = _this7.handleClick.bind(_this7);
+    return _this7;
   }
 
   _createClass(Led, [{
