@@ -81,8 +81,6 @@ function AngleInput($dom, options) {
   var name = key('name');
   var value = normalize(min);
 
-  accessible($dom);
-
   var $input = angleFormInput($dom);
   $input.name = name;
   
@@ -123,44 +121,6 @@ function AngleInput($dom, options) {
     fireEvent($dom, done ? 'change' : 'input', event);
   }
 
-  function beginKeyboardInput() {
-    var $all = document.body;
-
-    function endKeyboardInput(e) {
-      $all.removeEventListener('keydown', keyboardInput, false);
-      $dom.removeEventListener('blur', endKeyboardInput, false);
-    }
-
-    var LEFT_ARROW  = 37;
-    var UP_ARROW    = 38;
-    var RIGHT_ARROW = 39;
-    var DOWN_ARROW  = 40;
-
-    function keyboardInput(e) {
-      var dir = 0;
-      switch(e.keyCode) {
-        case UP_ARROW:
-        case RIGHT_ARROW:
-          dir = -1;
-          break; 
-        case DOWN_ARROW:
-        case LEFT_ARROW:
-          dir = 1;
-          break;
-      }
-      var val = value + (dir * step);
-      if(val === max + 1) val = max;
-      if(val === min - 1) val = max - 1; 
-      if(dir) {
-        e.preventDefault();
-        Angle(val);
-      }
-    }
-
-    $all.addEventListener('keydown', keyboardInput, false);
-    $dom.addEventListener('blur', endKeyboardInput, false);
-  }
-
   function beginTracking(e) {
     var $all = document.body;
 
@@ -188,13 +148,11 @@ function AngleInput($dom, options) {
   }
 
   function attach() {
-    $dom.addEventListener('focus', beginKeyboardInput, false);
     $dom.addEventListener('mousedown', beginTracking, false);
     return Angle;
   }
 
   function detach() {
-    $dom.removeEventListener('focus', beginKeyboardInput, false);
     $dom.removeEventListener('mousedown', beginTracking, false);
     return Angle;
   }

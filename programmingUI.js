@@ -146,7 +146,9 @@ var EventForm = function (_React$Component) {
 
       return React.createElement(
         'form',
-        null,
+        { onSubmit: function onSubmit(e) {
+            e.preventDefault();
+          } },
         React.createElement(
           'div',
           { className: 'header' },
@@ -221,6 +223,7 @@ var ServoItem = function (_React$Component2) {
     var _this3 = _possibleConstructorReturn(this, (ServoItem.__proto__ || Object.getPrototypeOf(ServoItem)).call(this, props));
 
     _this3.onUpdate = function (sequenceIndex, motorIndex, e) {
+      e.preventDefault();
       // console.log('in update with index ', motorIndex, ' value: ', e.target.value);
       this.props.onChange(sequenceIndex, motorIndex, e.target.value);
       var angleInput = this.state.angleInputs[motorIndex].querySelector('.angle-input-pivot');
@@ -286,6 +289,9 @@ var ServoItem = function (_React$Component2) {
             value: _this5.props.value[motorIndex],
             onChange: function onChange(e) {
               return _this5.onUpdate(_this5.props.sequenceIndex, motorIndex, e);
+            },
+            onKeyPress: function onKeyPress(e) {
+              e.key === 'Enter' && e.preventDefault();
             },
             index: _this5.props.index,
             className: 'servo-input',

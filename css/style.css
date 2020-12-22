@@ -414,7 +414,7 @@ video {
 }
 
 #form-container form .display-item-container .item {
-  margin: 10px 10px 10px 0;
+  margin: 0px 10px 10px 0;
   min-width: 155px;
 }
 

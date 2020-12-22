@@ -127,7 +127,7 @@ class EventForm extends React.Component {
 
   render() {
     return (
-      <form>
+      <form onSubmit={e => {e.preventDefault()}}>
         <div className="header">
           {this.props.label != 'test' ?
             <label>When I receive <span className="ml-label">{this.props.label}</span></label>
@@ -175,6 +175,7 @@ class ServoItem extends React.Component {
 
   // needed to trigger onchange when programmatically setting the angle value in the input field
   onUpdate = function(sequenceIndex, motorIndex, e) {
+    e.preventDefault();
     // console.log('in update with index ', motorIndex, ' value: ', e.target.value);
     this.props.onChange(sequenceIndex, motorIndex, e.target.value);
     let angleInput = this.state.angleInputs[motorIndex].querySelector('.angle-input-pivot');
@@ -215,6 +216,7 @@ class ServoItem extends React.Component {
           <input type="text"
             value={this.props.value[motorIndex]}
             onChange={(e) => this.onUpdate(this.props.sequenceIndex, motorIndex, e)}
+            onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
             index={this.props.index}
             className="servo-input"
             placeholder="90"
