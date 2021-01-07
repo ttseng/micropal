@@ -1,5 +1,6 @@
 $grey: #e8e8e8;
 $darkgrey: grey;
+$lightblack: #4c4c4c;
 $grey-hover: #dad8d8;
 $grey-secondary: #373737;
 $bordergrey: #cfcdcd;
@@ -51,6 +52,7 @@ body {
 }
 a {
   display: inline-block;
+  font-weight: bold;
 }
 #instructions-btn {
   margin-left: auto;
@@ -58,7 +60,7 @@ a {
 }
 .note {
   background: $grey;
-  color: $darkgrey;
+  color: $lightblack;
   padding: 5px 13px;
   border-radius: 5px;
   width: fit-content;
@@ -76,7 +78,7 @@ button {
   display: block;
   padding: 0.3rem 0.8rem;
   border: 1px solid $grey;
-  border-radius: 25px;
+  border-radius: 10px;
   margin: 10px 0;
   font-size: 16px;
   background-color: lightgrey;
@@ -465,6 +467,7 @@ video {
       }
       img {
         max-width: 100%;
+        height: 200px;
         margin-bottom: 10px;
       }
       video {
