@@ -1,7 +1,7 @@
 // https://teachablemachine.withgoogle.com/models/m3rMjtrvw/
 let modelUrl; // for storing the model URL
 let isPredicting = true;
-const options = {proabilityTheshold: 0.6};
+const options = {proabilityTheshold: 0.7};
 let classifier; // the ml5 classifier
 
 /*
