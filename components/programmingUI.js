@@ -99,7 +99,7 @@ class EventForm extends React.Component {
     e.preventDefault();
     if (paired) {
       let fn =
-        ` servoSequence(${JSON.stringify(this.state.servoSequence)}, ${this.state.timeDelay});
+        `servoSequence(${JSON.stringify(this.state.servoSequence)}, ${this.state.timeDelay});
         writeDisplay(${JSON.stringify(this.state.display)}, ${this.state.timeDelay});
       `;
       console.log('fn: ', fn);
@@ -118,7 +118,7 @@ class EventForm extends React.Component {
     let fnName = `got${formatLabel(this.props.label)}`;
 
     let newFunction =
-      `servoSequence([[${this.state.servoSequence}]], ${this.state.timeDelay});
+      `servoSequence(${JSON.stringify(this.state.servoSequence)}, ${this.state.timeDelay});
        writeDisplay(${JSON.stringify(this.state.display)}, ${this.state.timeDelay});
       `;
 

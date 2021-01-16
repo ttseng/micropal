@@ -151,7 +151,7 @@ async function pair() {
 function servoSequence(sequence, timeDelay){
   for(let i=0; i<sequence.length; i++){
     setTimeout(() => {
-      setServoPosition(sequence[i]);
+      setServoPosition(sequenonsoe[i]);
     }, timeDelay*i);
   }
 }
@@ -171,7 +171,6 @@ async function setServoPosition(angles){
   val2.setUint32(3, 10000, true); // period in microseconds
 
   // TODO: what's the relationship between range and period?
-  console.log('write servo values');
   pwmCharacteristic.writeValue(val1);
   setTimeout(() => pwmCharacteristic.writeValue(val2), 100);
 }

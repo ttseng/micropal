@@ -3,7 +3,16 @@ let modelUrl; // for storing the model URL
 let isPredicting = true;
 const options = {proabilityTheshold: 0.6};
 let classifier; // the ml5 classifier
-let predictFns = []; // used to store microbit responses to different inputs
+
+/*
+    used to store microbit responses to different inputs
+    the syntax is
+    gotClassName: servoSequence, writeDisplay
+    where servoSequence and writeDisplay are functions for controlling the servos and displays respectively
+*/
+
+let predictFns = []; 
+
 
 let modelUrlInput = document.querySelector('input#model');
 let modelLoadBtn = document.getElementById('load-model-btn');
@@ -77,6 +86,7 @@ function gotResult(error, result){
     
         try{
             if(isPredicting){
+                // run the script to control the microbit, as defined in programmingUI.js
                 predictFns[`got${formatLabel(currentLabel)}`]();     
             }
         }catch(error){

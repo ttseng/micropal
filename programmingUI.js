@@ -118,7 +118,7 @@ var EventForm = function (_React$Component) {
     value: function testBtnOnClick(e) {
       e.preventDefault();
       if (paired) {
-        var fn = ' servoSequence(' + JSON.stringify(this.state.servoSequence) + ', ' + this.state.timeDelay + ');\n        writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
+        var fn = 'servoSequence(' + JSON.stringify(this.state.servoSequence) + ', ' + this.state.timeDelay + ');\n        writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
         console.log('fn: ', fn);
         try {
           eval(fn);
@@ -135,7 +135,7 @@ var EventForm = function (_React$Component) {
       e.preventDefault();
       var fnName = 'got' + formatLabel(this.props.label);
 
-      var newFunction = 'servoSequence([[' + this.state.servoSequence + ']], ' + this.state.timeDelay + ');\n       writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
+      var newFunction = 'servoSequence(' + JSON.stringify(this.state.servoSequence) + ', ' + this.state.timeDelay + ');\n       writeDisplay(' + JSON.stringify(this.state.display) + ', ' + this.state.timeDelay + ');\n      ';
 
       predictFns[fnName] = new Function([], newFunction);
     }
