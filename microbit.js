@@ -151,7 +151,7 @@ async function pair() {
 function servoSequence(sequence, timeDelay){
   for(let i=0; i<sequence.length; i++){
     setTimeout(() => {
-      setServoPosition(sequenonsoe[i]);
+      setServoPosition(sequence[i]);
     }, timeDelay*i);
   }
 }
